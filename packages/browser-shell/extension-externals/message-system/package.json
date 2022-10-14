@@ -1,0 +1,41 @@
+{
+  "name": "@workspace/message-system",
+  "displayName": "message-system",
+  "version": "0.0.0",
+  "description": "message-system browser extension",
+  "license": "MIT",
+  "private": false,
+  "sideEffects": true,
+  "type": "module",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js"
+    }
+  },
+  "scripts": {
+    "build": "cross-env NODE_ENV=production run-s clean build:deps:js gen:dts",
+    "dev": "cross-env NODE_ENV=development run-p clean build:deps:js gen:dts:watch",
+    "build:deps:js": "node esbuild.js",
+    "gen:dts": "tsc -p tsconfig.json --emitDeclarationOnly --declarationDir dist",
+    "gen:dts:watch": "yarn run gen:dts -w",
+    "clean": "rimraf dist tsconfig.tsbuildinfo",
+    "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
+    "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx,json}",
+    "format": "prettier --write src/**/*.{js,jsx,ts,tsx,css,md,json} --config ../../.prettierrc"
+  },
+  "dependencies": {
+    "webextension-polyfill": "^0.9.0",
+    "rxjs": "^7.5.5"
+  },
+  "devDependencies": {
+    "@types/webextension-polyfill": "^0.9.0"
+  },
+  "peerDependencies": {
+    "webextension-polyfill": "^0.9.0",
+    "rxjs": "^7.5.5"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "files": [],
+  "compilerOptions": {
+    "disableSourceOfProjectReferenceRedirect": true
+  },
+  "references": [
+    {
+      "path": "./packages/browser-shell"
+    },
+    {
+      "path": "./packages/message-system"
+    }
+  ]
+}
+
+
