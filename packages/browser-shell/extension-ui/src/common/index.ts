@@ -5,3 +5,4 @@ export * from './sharedInPageUI';
 export * from './styles';
 export * from './utils';
 export * from './types';
+export * from './dev_config';

@@ -1,12 +1,11 @@
 import React from 'react';
 import cx from 'classnames';
-import { SvgTooltipComponent } from '@ui/common/shared-components';
-
 import IconClose from '~icons/public-assets-icons/close.svg';
 import IconOpenSidebar from '~icons/public-assets-icons/openSidebar.svg';
 import IconAsleep from '~icons/public-assets-icons/asleep.svg';
 import IconAsleepFilled from '~icons/public-assets-icons/asleepFilled.svg';
-import { useThemeContext } from '@ui/common/context';
+// import { useThemeContext, SvgTooltipComponent } from '~extension-ui';
+import { useThemeContext, SvgTooltipComponent } from '../../../../../common';
 
 import { ToolbarSidebarProps } from '../../toolbar';
 

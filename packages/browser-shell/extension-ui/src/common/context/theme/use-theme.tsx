@@ -1,5 +1,5 @@
 import React, { Dispatch, ReactNode, SetStateAction, useEffect } from 'react';
-import { msSendSharedStateSettings } from '@utils/messages';
+import { msSendSharedStateSettings } from '@workspace/extension-common';
 import { THEMES, ThemeType, Theme } from './theme';
 
 interface ThemeContextProps {

@@ -36,7 +36,8 @@ const useClickOutside = ({
         if (
           ignoreClassNames &&
           (event.target.shadowRoot?.querySelectorAll(ignoreClassNames) ||
-            event.target.classList.contains(ignoreClassNames))
+            event.target.classList.contains(ignoreClassNames) ||
+            event.target.closest('SVG')?.classList.contains(ignoreClassNames))
         )
           return;
 

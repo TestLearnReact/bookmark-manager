@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import * as S from './styles';
 
 import IconClose from '~icons/public-assets-icons/close.svg';
-import { TooltipButtonIcon } from '@ui/common/shared-components';
+import { TooltipButtonIcon } from '../../../../common';
 
 // import styles from './Button.module.css';
 

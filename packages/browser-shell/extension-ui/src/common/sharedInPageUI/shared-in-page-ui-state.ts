@@ -1,14 +1,17 @@
 /* eslint-disable */
 import {
+  InPageUIComponent,
+  InPageUIComponentShowState,
   msSendComponentDestroy,
   msSendComponentInit,
   msSendInPageUiState,
-} from '@utils/messages';
-import {
-  InPageUIComponentShowState,
-  InPageUIComponent,
   SharedInPageUIInterface,
-} from './types';
+} from '@workspace/extension-common';
+// import {
+//   InPageUIComponentShowState,
+//   InPageUIComponent,
+//   SharedInPageUIInterface,
+// } from './types';
 
 export const isCsDevHtmlFirefox = (url: string) =>
   url.includes('moz-extension://') && url.includes('/dist/csdev/index.html');

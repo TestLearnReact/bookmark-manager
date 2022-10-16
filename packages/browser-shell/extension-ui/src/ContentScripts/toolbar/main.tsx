@@ -1,9 +1,14 @@
 import React from 'react';
-import * as ReactDOM from 'react-dom';
+// import * as ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { StyleSheetManager } from 'styled-components';
 import ToolbarHolderContainer from './container/toolbar-holder';
-import { SharedInPageUIState } from '@ui/common/sharedInPageUI';
-import { InPageUIRootMount, ThemeProviderContext } from '@ui/common';
+
+import {
+  SharedInPageUIState,
+  InPageUIRootMount,
+  ThemeProviderContext,
+} from '../../common';
 
 export interface ToolbarContainerDependencies {
   inPageUI: SharedInPageUIState;
@@ -13,7 +18,9 @@ export function setupFrontendToolbar(
   mount: InPageUIRootMount,
   dependencies: ToolbarContainerDependencies,
 ): void {
-  ReactDOM.render(
+  const root = ReactDOM.createRoot(mount.rootElement as HTMLElement);
+
+  root.render(
     <React.StrictMode>
       <StyleSheetManager target={mount.rootElement as any}>
         <ThemeProviderContext>
@@ -21,19 +28,20 @@ export function setupFrontendToolbar(
         </ThemeProviderContext>
       </StyleSheetManager>
     </React.StrictMode>,
-    mount.rootElement,
+    // mount.rootElement,
   );
 }
 
 export function destroyFrontendToolbar(
-  target: HTMLElement,
+  target: ReactDOM.Root, // HTMLElement,
   shadowRoot: ShadowRoot | null,
 ): void {
-  ReactDOM.unmountComponentAtNode(target); // todo
+  // ReactDOM.unmountComponentAtNode(target); // todo
+  target.unmount();
 
-  if (shadowRoot) {
-    shadowRoot.removeChild(target);
-  } else {
-    document.body.removeChild(target);
-  }
+  // if (shadowRoot) {
+  //   shadowRoot.removeChild(target);
+  // } else {
+  //   document.body.removeChild(target);
+  // }
 }

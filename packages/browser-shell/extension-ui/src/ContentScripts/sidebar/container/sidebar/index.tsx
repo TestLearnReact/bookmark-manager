@@ -1,22 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { SidebarContainerDependencies } from '../../main';
 import {
+  InPageUIComponentShowState,
   msInPageUiStateStream,
   msSharedStateSettingsStream,
-} from '@utils/messages';
-import { useThemeContext } from '@ui/common/context';
-import { useClickOutside } from '@ui/common/hooks';
+} from '@workspace/extension-common';
 import {
   darkTheme,
   lightTheme,
+  useThemeContext,
+  _DEV_OPTIONS,
   ThemeProvider as StyledComponentThemeProvider,
-} from '@ui/common/styles';
-
-import * as S from './styles';
-import { _DEV_OPTIONS } from '@ui/common/dev_config';
-import { InPageUIComponentShowState } from '@ui/common';
+  useClickOutside,
+} from '@workspace/extension-ui/common';
 
 import { Sidebar } from '../../components/sidebar';
+
+import * as S from './styles';
 
 interface SidebarHolderProps {
   dependencies: SidebarContainerDependencies;

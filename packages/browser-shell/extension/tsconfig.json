@@ -1,0 +1,21 @@
+{
+  "extends": "../../../tsconfig.settings.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "types": ["vite/client", "chrome"]
+  },
+  "references": [
+    { "path": "../extension-ui" },
+    { "path": "../extension-common" }
+  ],
+  "include": [
+    "src",
+    "build-tools/**/*.ts"
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  }
+}

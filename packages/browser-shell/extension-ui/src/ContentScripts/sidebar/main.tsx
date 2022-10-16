@@ -1,10 +1,12 @@
 import React from 'react';
-import * as ReactDOM from 'react-dom';
-import { InPageUIRootMount } from '@ui/common';
+import ReactDOM from 'react-dom/client';
+// import * as ReactDOM from 'react-dom';
 import { StyleSheetManager } from 'styled-components';
-
-import { SharedInPageUIState } from '@ui/common/sharedInPageUI';
-import { ThemeProviderContext } from '@ui/common/context';
+import {
+  InPageUIRootMount,
+  SharedInPageUIState,
+  ThemeProviderContext,
+} from '../../common';
 import SidebarHolderContainer from './container/sidebar-holder';
 
 export interface SidebarContainerDependencies {
@@ -15,7 +17,9 @@ export function setupFrontendSidebar(
   mount: InPageUIRootMount,
   dependencies: SidebarContainerDependencies,
 ): void {
-  ReactDOM.render(
+  const root = ReactDOM.createRoot(mount.rootElement as HTMLElement);
+
+  root.render(
     <React.StrictMode>
       <StyleSheetManager target={mount.shadowRoot as any}>
         <ThemeProviderContext>
@@ -23,19 +27,19 @@ export function setupFrontendSidebar(
         </ThemeProviderContext>
       </StyleSheetManager>
     </React.StrictMode>,
-    mount.rootElement,
+    // mount.rootElement,
   );
 }
 
 export function destroyFrontendSidebar(
-  target: HTMLElement,
+  target: ReactDOM.Root, // HTMLElement,
   shadowRoot: ShadowRoot | null,
 ): void {
-  ReactDOM.unmountComponentAtNode(target);
-
-  if (shadowRoot) {
-    shadowRoot.removeChild(target);
-  } else {
-    document.body.removeChild(target);
-  }
+  // ReactDOM.unmountComponentAtNode(target);
+  target.unmount();
+  // if (shadowRoot) {
+  //   shadowRoot.removeChild(target);
+  // } else {
+  //   document.body.removeChild(target);
+  // }
 }

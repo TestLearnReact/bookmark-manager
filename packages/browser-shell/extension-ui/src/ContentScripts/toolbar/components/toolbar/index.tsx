@@ -1,12 +1,13 @@
 import React from 'react';
 import cx from 'classnames';
 import { ToolbarContainerDependencies } from '../../main';
-import { InPageUIComponentShowState } from '@ui/common/sharedInPageUI';
+import { InPageUIComponentShowState } from '@workspace/extension-common';
 import ToolbarActions from '../toolbar-components/toolbarActions';
-import { useThemeContext } from '@ui/common/context';
+
+// import { _DEV_OPTIONS, useThemeContext } from '~extension-ui';
+import { _DEV_OPTIONS, useThemeContext } from '../../../../common';
 
 import './styles.scss';
-import { _DEV_OPTIONS } from '@ui/common/dev_config';
 
 export interface ToolbarSubcomponentProps {
   sidebar: ToolbarSidebarProps;

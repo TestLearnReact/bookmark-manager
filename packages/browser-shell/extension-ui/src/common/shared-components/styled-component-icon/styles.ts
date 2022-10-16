@@ -1,4 +1,4 @@
-import { styled } from '@ui/common/styles';
+import { styled } from '../../styles';
 import { IIconProps } from './Icon';
 
 export const Wrapper = styled.div<

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { ToolbarContainerDependencies } from '../../main';
-import { msInPageUiStateStream } from '@utils/messages';
+import {
+  InPageUIComponentShowState,
+  msInPageUiStateStream,
+} from '@workspace/extension-common';
 
-import { useThemeContext } from '@ui/common/context';
-import { darkTheme, lightTheme, ThemeProvider } from '@ui/common/styles';
+import { useThemeContext } from '../../../../common/context';
+// import { darkTheme, lightTheme, ThemeProvider } from '~extension-ui';
+import { darkTheme, lightTheme, ThemeProvider } from '../../../../common';
 
 import Toolbar from '../../components/toolbar';
-import { InPageUIComponentShowState } from '@ui/common';
 
 interface IToolbarContainer {
   dependencies: ToolbarContainerDependencies;

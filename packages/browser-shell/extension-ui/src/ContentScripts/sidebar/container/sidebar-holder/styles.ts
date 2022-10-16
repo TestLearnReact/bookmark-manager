@@ -1,4 +1,7 @@
-import { createGlobalStyle, styled } from '@ui/common/styles';
+import {
+  createGlobalStyle,
+  styled,
+} from '../../../../common/styles/styled-component';
 
 export const GlobalStyle = createGlobalStyle<{
   sidebarWidth: string;

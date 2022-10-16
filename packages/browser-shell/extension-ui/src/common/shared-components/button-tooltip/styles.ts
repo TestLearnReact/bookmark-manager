@@ -1,5 +1,5 @@
-import { styled } from '@ui/common/styles';
 import { TooltipPosition } from '.';
+import { styled } from '../../styles';
 
 const determineContainerStyles = ({ position }: { position: string }) => {
   switch (position) {

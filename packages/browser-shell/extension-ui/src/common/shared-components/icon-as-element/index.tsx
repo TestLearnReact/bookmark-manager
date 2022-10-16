@@ -1,5 +1,5 @@
 import React, { ReactElement, SVGProps } from 'react';
-import { ButtonTooltip, TooltipPosition } from '../button-tooltip'; // "@ui/common/shared-components";
+import ButtonTooltip, { TooltipPosition } from '../button-tooltip';
 
 import '../style-element.scss';
 
@@ -30,8 +30,14 @@ export const SvgTooltipElement = ({
   });
 
   return (
-    <ButtonTooltip tooltipText={tooltipText} position={position}>
-      <div onClick={onClick}>{clonedIcon}</div>
+    <ButtonTooltip
+      tooltipText={tooltipText}
+      position={position}
+      className='ignore-react-onclickoutside'
+    >
+      <div className='ignore-react-onclickoutside' onClick={onClick}>
+        {clonedIcon}
+      </div>
     </ButtonTooltip>
   );
 };

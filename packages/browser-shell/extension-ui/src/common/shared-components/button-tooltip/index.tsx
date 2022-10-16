@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useEventListener } from '@ui/common/hooks';
+import React, { useState, useRef } from 'react';
+import { useEventListener } from '../../hooks';
 
 import * as S from './styles';
 
@@ -20,12 +20,14 @@ export interface IButtonTooltipProps {
   tooltipText: string;
   position?: TooltipPosition;
   children: React.ReactNode;
+  className?: string;
 }
 
 export const ButtonTooltip: React.FC<IButtonTooltipProps> = ({
   children,
   tooltipText,
   position = 'leftNarrow',
+  className,
 }) => {
   const tooltipRef = useRef<HTMLDivElement>(null);
 
@@ -40,7 +42,7 @@ export const ButtonTooltip: React.FC<IButtonTooltipProps> = ({
   useEventListener('mouseleave', handleMouseLeave, tooltipRef);
 
   return (
-    <S.Container ref={tooltipRef} position={position}>
+    <S.Container ref={tooltipRef} position={position} className={className}>
       {state.displayTooltip && (
         <S.TooltipBubble position={position}>
           <S.TooltipText>{tooltipText}</S.TooltipText>

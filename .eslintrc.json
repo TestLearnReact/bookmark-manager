@@ -28,15 +28,20 @@
         "no-duplicate-imports": "error",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
-        "@typescript-eslint/no-unused-vars":"off"
-        // "prettier/prettier": 2 //,
+        "@typescript-eslint/no-unused-vars":"off",
+        "prettier/prettier": 2 //,
     },
     "settings": {
+        "react": {
+            "version": "detect"
+        },
         "import/resolver": {
           "typescript": {
             "project": [
-            "packages/browser-shell/tsconfig.json",
-            "packages/message-system/tsconfig.json"
+                 "packages/browser-shell/extension/tsconfig.json",
+                 "packages/browser-shell/extension-ui/tsconfig.json",
+                 "packages/browser-shell/extension-common/tsconfig.json",
+                 "packages/browser-shell/extension-externals/message-system/tsconfig.json"
             ]
 
           }

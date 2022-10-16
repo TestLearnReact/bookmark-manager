@@ -1,13 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import cx from 'classnames';
 import { ToolbarContainerDependencies } from '../../main';
-import { useEventListener } from '@ui/common/hooks';
-import { msInPageUiStateStream } from '@utils/messages';
+import { msInPageUiStateStream } from '@workspace/extension-common';
 
 import ToolbarContainer from '../toolbar';
 
 import './styles.css';
-// import "@ui/common/styles/scss/abstracts";
+import { useEventListener } from '../../../../common';
 
 const TOOLBAR_HIDE_TIMEOUT = 2000;
 

@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "description": "message-system browser extension",
   "license": "MIT",
-  "private": false,
   "sideEffects": true,
   "type": "module",
   "main": "./dist/index.cjs.js",
@@ -25,17 +24,17 @@
     "clean": "rimraf dist tsconfig.tsbuildinfo",
     "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
     "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx,json}",
-    "format": "prettier --write src/**/*.{js,jsx,ts,tsx,css,md,json} --config ../../.prettierrc"
+    "format": "prettier --write src/**/*.{js,jsx,ts,tsx,css,md,json} --config ../../../../.prettierrc"
   },
   "dependencies": {
-    "webextension-polyfill": "^0.9.0",
-    "rxjs": "^7.5.5"
+    "rxjs": "^7.5.7",
+    "webextension-polyfill": "^0.10.0"
   },
   "devDependencies": {
-    "@types/webextension-polyfill": "^0.9.0"
+    "@types/webextension-polyfill": "^0.9.1"
   },
   "peerDependencies": {
-    "webextension-polyfill": "^0.9.0",
-    "rxjs": "^7.5.5"
+    "rxjs": "^7.5.7",
+    "webextension-polyfill": "^0.10.0"
   }
 }

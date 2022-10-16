@@ -5,10 +5,16 @@
   },
   "references": [
     {
-      "path": "./packages/browser-shell"
+      "path": "./packages/browser-shell/extension"
     },
     {
-      "path": "./packages/message-system"
+      "path": "./packages/browser-shell/extension-ui"
+    },
+    {
+      "path": "./packages/browser-shell/extension-common"
+    },
+    {
+      "path": "./packages/browser-shell/extension-externals/message-system"
     }
   ]
 }
