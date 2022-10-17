@@ -4,7 +4,7 @@ import * as S from './styles';
 import IconClose from '~icons/public-assets-icons/close.svg';
 import { TooltipButtonIcon } from '../../../../common';
 
-// import styles from './Button.module.css';
+import styles from './Button.module.css';
 
 export const Sidebar: React.FC = () => {
   return (
@@ -20,7 +20,7 @@ export const Sidebar: React.FC = () => {
       </SidbarTopBar>
       <S.Content>.. Content ..</S.Content>
 
-      {/* <CssModuleTestButton>.</CssModuleTestButton> */}
+      <CssModuleTestButton>.</CssModuleTestButton>
     </S.Container>
   );
 };
@@ -35,6 +35,6 @@ const CssModuleTestButton: React.FC<{ children: ReactNode }> = ({
   children,
 }) => (
   <>
-    <button className={'styles.error'}>Error Button</button>
+    <button className={styles.error}>Error Button</button>
   </>
 );

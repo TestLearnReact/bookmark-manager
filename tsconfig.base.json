@@ -29,8 +29,10 @@
       "types": [
         "unplugin-icons/types/react",
         "chrome",
-        "node"
-      ]  
+        "node",
+        "./global.d.ts"
+      ],
+      "plugins": [{ "name": "typescript-plugin-css-modules" }]  
     },
     "ts-node": {
       "compilerOptions": {

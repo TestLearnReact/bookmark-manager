@@ -141,6 +141,119 @@ const config: Configuration = {
         },
       },
       // {
+      //   test: /\.css$/,
+      //   use: [
+      //     isProd && MiniCssExtractPlugin.loader,
+      //     {
+      //       loader: 'css-loader',
+      //       options: {
+      //         importLoaders: 1,
+      //       },
+      //     },
+      //     {
+      //       loader: 'esbuild-loader',
+      //       options: {
+      //         loader: 'css',
+      //         minify: isProd,
+      //       },
+      //     },
+      //     'postcss-loader',
+      //   ].filter(Boolean),
+      //   exclude: /\.module\.css$/,
+      // },
+      // {
+      //   test: /\.css$/,
+      //   use: [
+      //     isProd && MiniCssExtractPlugin.loader,
+      //     {
+      //       loader: 'css-loader',
+      //       options: {
+      //         importLoaders: 1,
+      //         modules: true,
+      //       },
+      //     },
+      //     {
+      //       loader: 'esbuild-loader',
+      //       options: {
+      //         loader: 'css',
+      //         minify: isProd,
+      //       },
+      //     },
+      //     'postcss-loader',
+      //   ].filter(Boolean),
+      //   include: /\.module\.css$/,
+      // },
+      // {
+      //   test: /\.s[ac]ss$/i,
+      //   use: [
+      //     isProd && MiniCssExtractPlugin.loader,
+      //     isDev && 'style-loader',
+      //     'css-loader?sourceMap',
+      //     {
+      //       loader: 'sass-loader?sourceMap',
+      //       options: {
+      //         implementation: require('sass'),
+      //         webpackImporter: false,
+      //         sassOptions: {
+      //             fiber: require('fibers'),
+      //         },
+      //         additionalData: "@use 'src/styles/styleUtils/variables' as *;",
+      //       },
+      //     },
+      //     'postcss-loader',
+      //   ].filter(Boolean),
+      // },
+      // {
+      //   test: /\.less$/,
+      //   use: [
+      //     isProd && MiniCssExtractPlugin.loader,
+      //     'css-loader',
+      //     'less-loader',
+      //   ].filter(Boolean),
+      // },
+      // {
+      //   test: /\.(jpe?g|png|gif|svg|webp)$/i,
+      //   type: 'asset/resource',
+      //   generator: {
+      //     filename: 'static/assets/images/[contenthash][ext][query]',
+      //   },
+      // },
+      // {
+      //   test: /\.svg/,
+      //   type: 'asset/inline',
+      // },
+      // {
+      //   test: /\.svg$/,
+      //   use: ['@svgr/webpack']
+      // },
+      // {
+      //   test: /\.(ogg|mp3|wav|mpe?g)$/i,
+      //   use: 'file-loader'
+      //   type: 'asset/resource',
+      //   generator: {
+      //     filename: 'static/assets/audio/[contenthash][ext][query]',
+      //   },
+      // },
+      // {
+      //   test: /favicon\.(png|ico)$/,
+      //   type: 'asset/resource',
+      // },
+      // {
+      //   test: /\.(woff|woff2|eot|ttf|otf)$/i,
+      //   type: 'asset/resource',
+      //   generator: {
+      //     filename: 'static/assets/fonts/[contenthash][ext][query]',
+      //   },
+      // },
+      // {
+      //   test: /\.(mp4|webm)$/,
+      //   type: 'asset/resource',
+      //   generator: {
+      //     filename: 'static/assets/video/[contenthash][ext][query]',
+      //   },
+      // },
+
+      // {
       //   test: /\\.css$/,
       //   use: [
       //     "style-loader",
@@ -185,6 +298,42 @@ const config: Configuration = {
           'resolve-url-loader', // Rewrites relative paths in url() statements
           'sass-loader', // Takes the Sass/SCSS file and compiles to the CSS
         ],
+        exclude: /\.module\.css$/, // /////
+      },
+      {
+        test: /\.(sa|sc|c)ss$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader, // It creates a CSS file per JS file which contains CSS
+          },
+          {
+            loader: 'css-loader', // Takes the CSS files and returns the CSS with imports and url(...) for Webpack
+            options: {
+              sourceMap: true,
+              importLoaders: 1,
+              modules: true,
+            },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  [
+                    'autoprefixer',
+                    {
+                      // Options
+                    },
+                  ],
+                ],
+              },
+            },
+          },
+
+          'resolve-url-loader', // Rewrites relative paths in url() statements
+          'sass-loader', // Takes the Sass/SCSS file and compiles to the CSS
+        ],
+        include: /\.module\.css$/, // /////
       },
       {
         test: /\.svg$/,

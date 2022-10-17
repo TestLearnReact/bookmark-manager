@@ -1,5 +1,5 @@
 import browser, { Tabs } from 'webextension-polyfill';
-import { ContentScriptComponent } from '@extension/contentScripts/types';
+import { ContentScriptComponent } from '@workspace/extension-common/types';
 import {
   msInjectScriptStream,
   msComponentInitStream,
@@ -19,7 +19,7 @@ export const main = async ({
 }) => {
   browser.runtime.onInstalled.addListener((): void => {
     // eslint-disable-next-line no-console
-    console.log('Extension instal.led');
+    console.log('Extension installed');
   });
 
   msInjectScriptStream.subscribe(async ([{ filename }, sender]) => {
