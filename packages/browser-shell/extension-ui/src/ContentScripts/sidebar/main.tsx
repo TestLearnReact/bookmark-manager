@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-// import * as ReactDOM from 'react-dom';
+import { Database, DatabaseProvider } from '@workspace/extension-base';
 import { StyleSheetManager } from 'styled-components';
 import {
   InPageUIRootMount,
@@ -11,6 +11,7 @@ import SidebarHolderContainer from './container/sidebar-holder';
 
 export interface SidebarContainerDependencies {
   inPageUI: SharedInPageUIState;
+  watermelonDb: Database;
 }
 
 export function setupFrontendSidebar(
@@ -23,7 +24,9 @@ export function setupFrontendSidebar(
     <React.StrictMode>
       <StyleSheetManager target={mount.shadowRoot as any}>
         <ThemeProviderContext>
-          <SidebarHolderContainer dependencies={dependencies} />
+          <DatabaseProvider database={dependencies.watermelonDb}>
+            <SidebarHolderContainer dependencies={dependencies} />
+          </DatabaseProvider>
         </ThemeProviderContext>
       </StyleSheetManager>
     </React.StrictMode>,

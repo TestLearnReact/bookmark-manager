@@ -1,3 +1,4 @@
+import { genWatermelonDb } from '@workspace/extension-base';
 import {
   msSendComponentInit,
   msSendInjectScript,
@@ -35,6 +36,9 @@ const csMainModule = async (
   } = {};
 
   // 2. Initialise dependencies required by content scripts
+  const watermelonDb = await genWatermelonDb({
+    dbName: 'SharedFrontendWatermelonDb',
+  });
 
   // 3. Creates an instance of the InPageUI manager class to encapsulate
   // business logic of initialising and hide/showing components.
@@ -72,8 +76,8 @@ const csMainModule = async (
   // component, that when run, initialise the respective component with it's
   // dependencies
   const csDeps = {
-    toolbar: { inPageUI },
-    sidebar: { inPageUI },
+    toolbar: { inPageUI, watermelonDb },
+    sidebar: { inPageUI, watermelonDb },
   };
 
   const contentScriptRegistry: ContentScriptRegistry = {

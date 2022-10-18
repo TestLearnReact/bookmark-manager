@@ -5,6 +5,7 @@ export const packages = [
   'extension',
   'extension-ui',
   'extension-common',
+  'extension-base',
   'extension-externals/message-system',
 ];
 

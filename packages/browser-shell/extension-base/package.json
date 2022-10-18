@@ -1,0 +1,21 @@
+{
+  "name": "@workspace/extension-base",
+  "displayName": "extension-base",
+  "version": "0.0.0",
+  "description": "shared functions, utils etc.",
+  "sideEffects": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
+    "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx,json}",
+    "format": "prettier --write ./**/*.{js,jsx,ts,tsx,css,md,json} --config ../../../.prettierrc"
+  },
+  "dependencies": {
+    "@nozbe/watermelondb": "^0.24.0",
+    "@nozbe/with-observables": "^1.4.1",
+    "@workspace/extension-common": "*"
+  },
+  "devDependencies": {}
+}

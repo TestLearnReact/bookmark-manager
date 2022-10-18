@@ -1,9 +1,8 @@
 import React from 'react';
-// import * as ReactDOM from 'react-dom';
 import ReactDOM from 'react-dom/client';
 import { StyleSheetManager } from 'styled-components';
 import ToolbarHolderContainer from './container/toolbar-holder';
-
+import { Database, DatabaseProvider } from '@workspace/extension-base';
 import {
   SharedInPageUIState,
   InPageUIRootMount,
@@ -12,6 +11,7 @@ import {
 
 export interface ToolbarContainerDependencies {
   inPageUI: SharedInPageUIState;
+  watermelonDb: Database;
 }
 
 export function setupFrontendToolbar(
@@ -24,7 +24,9 @@ export function setupFrontendToolbar(
     <React.StrictMode>
       <StyleSheetManager target={mount.rootElement as any}>
         <ThemeProviderContext>
-          <ToolbarHolderContainer dependencies={dependencies} />
+          <DatabaseProvider database={dependencies.watermelonDb}>
+            <ToolbarHolderContainer dependencies={dependencies} />
+          </DatabaseProvider>
         </ThemeProviderContext>
       </StyleSheetManager>
     </React.StrictMode>,

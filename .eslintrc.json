@@ -41,6 +41,7 @@
                  "packages/browser-shell/extension/tsconfig.json",
                  "packages/browser-shell/extension-ui/tsconfig.json",
                  "packages/browser-shell/extension-common/tsconfig.json",
+                 "packages/browser-shell/extension-base/tsconfig.json",
                  "packages/browser-shell/extension-externals/message-system/tsconfig.json"
             ]
 

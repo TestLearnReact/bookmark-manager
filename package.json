@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "build": "lerna run build --stream  --concurrency 99",
+    "build:chrome": "lerna run build:chrome",
     "dev": "cross-env NODE_ENV=development lerna run dev --parallel",
     "lint": "lerna run lint",
     "lint:fix": "lerna run lint:fix",
