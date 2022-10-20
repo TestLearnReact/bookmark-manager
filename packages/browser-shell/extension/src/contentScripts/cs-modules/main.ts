@@ -5,7 +5,11 @@ import {
   Resolvable,
   resolvablePromise,
 } from '@workspace/extension-common';
-import { SharedInPageUIState } from '@workspace/extension-ui';
+import {
+  SharedInPageUIState,
+  SidebarContainerDependencies,
+  ToolbarContainerDependencies,
+} from '@workspace/extension-ui';
 import {
   ContentScriptComponent,
   ContentScriptRegistry,
@@ -46,6 +50,7 @@ const csMainModule = async (
   const inPageUI = new SharedInPageUIState({
     loadComponent: (component) => {
       if (!components[component]) {
+        console.log(!components[component], component);
         components[component] = resolvablePromise<void>();
         loadContentScript(component);
       }
@@ -75,7 +80,12 @@ const csMainModule = async (
   // 4. Create a contentScriptRegistry object with functions for each content script
   // component, that when run, initialise the respective component with it's
   // dependencies
-  const csDeps = {
+
+  interface zz {
+    toolbar: ToolbarContainerDependencies;
+    sidebar: SidebarContainerDependencies;
+  }
+  const csDeps: zz = {
     toolbar: { inPageUI, watermelonDb },
     sidebar: { inPageUI, watermelonDb },
   };
@@ -108,17 +118,19 @@ const csMainModule = async (
     // await toolbarMain(csDeps.toolbar);
     // await sidebarMain(csDeps.sidebar);
 
-    msSendComponentInit({ component: 'toolbar' }).then(() =>
-      inPageUI.setComponentShouldSetup({
-        component: 'toolbar',
-        shouldSetUp: true,
-      }),
+    msSendComponentInit({ component: 'toolbar', scriptSender: 'main' }).then(
+      () =>
+        inPageUI.setComponentShouldSetup({
+          component: 'toolbar',
+          shouldSetUp: true,
+        }),
     );
-    msSendComponentInit({ component: 'sidebar' }).then(() =>
-      inPageUI.setComponentShouldSetup({
-        component: 'sidebar',
-        shouldSetUp: true,
-      }),
+    msSendComponentInit({ component: 'sidebar', scriptSender: 'main' }).then(
+      () =>
+        inPageUI.setComponentShouldSetup({
+          component: 'sidebar',
+          shouldSetUp: true,
+        }),
     );
   } else {
     // inject scripts

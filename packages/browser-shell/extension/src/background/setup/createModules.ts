@@ -21,7 +21,7 @@ export async function createBackgroundModules(options: {
   browserAPIs: Browser;
   contentScriptsPaths: any;
 }): Promise<IBackgroundModules> {
-  messageBridgeCsBgCs();
+  await messageBridgeCsBgCs();
 
   const getNow = () => Date.now();
 

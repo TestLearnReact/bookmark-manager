@@ -20,4 +20,4 @@ export interface SharedInPageUIInterface {
   toggleTheme(): Promise<void>;
 }
 
-export type ContentScriptComponent = 'toolbar' | 'sidebar';
+export type ContentScriptComponent = 'toolbar' | 'sidebar' | 'main';

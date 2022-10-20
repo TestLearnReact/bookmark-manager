@@ -13,10 +13,15 @@ import {
  * message bridge between content scripts
  */
 
-export const messageBridgeCsBgCs = () => {
-  msComponentInitStream.subscribe(async ([{ component }, sender]) => {
-    await msSendComponentInit({ component }, { tabId: sender.tab?.id });
-  });
+export const messageBridgeCsBgCs = async () => {
+  msComponentInitStream.subscribe(
+    async ([{ component, scriptSender }, sender]) => {
+      await msSendComponentInit(
+        { component, scriptSender },
+        { tabId: sender.tab?.id },
+      );
+    },
+  );
 
   msComponentDestroyStream.subscribe(async ([{ component }, sender]) => {
     await msSendComponentDestroy({ component }, { tabId: sender.tab?.id });

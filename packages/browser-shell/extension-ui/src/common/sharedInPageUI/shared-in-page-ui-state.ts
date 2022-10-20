@@ -47,7 +47,7 @@ export class SharedInPageUIState implements SharedInPageUIInterface {
 
   async showSidebar(options?: any) {
     if (this.componentsShown.sidebar) return;
-
+    console.log('showSidebar');
     this.componentsShown.sidebar = true;
     this.componentsShown.toolbar = true;
     await msSendInPageUiState({
@@ -83,7 +83,7 @@ export class SharedInPageUIState implements SharedInPageUIInterface {
 
   async showToolbar(options?: { action?: any }) {
     if (this.componentsShown.toolbar) return;
-
+    console.log('showToolbar');
     this.componentsShown.toolbar = true;
     await msSendInPageUiState({
       ...this.componentsShown,
@@ -132,7 +132,7 @@ export class SharedInPageUIState implements SharedInPageUIInterface {
 
   async reloadComponent(component: InPageUIComponent, options: any = {}) {
     await this.options.loadComponent(component);
-    msSendComponentInit({ component: component });
+    msSendComponentInit({ component: component, scriptSender: component });
   }
 
   private async _maybeEmitShouldSetUp(
@@ -142,7 +142,10 @@ export class SharedInPageUIState implements SharedInPageUIInterface {
     if (this.componentsSetUp[component]) return;
 
     this.componentsSetUp[component] = true;
-    await msSendComponentInit({ component: component });
+    await msSendComponentInit({
+      component: component,
+      scriptSender: component,
+    });
   }
 
   /** development -> no script injected */

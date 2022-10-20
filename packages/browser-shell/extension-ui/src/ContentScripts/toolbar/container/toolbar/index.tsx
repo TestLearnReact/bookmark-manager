@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ToolbarContainerDependencies } from '../../main';
 import {
   InPageUIComponentShowState,
@@ -29,8 +29,28 @@ const ToolbarContainer: React.FC<IToolbarContainer> = ({
   const [sharedInPageUiState, setSharedInPageUiState] =
     useState<InPageUIComponentShowState>(inPageUI.componentsShown);
 
+  const refState = useRef<InPageUIComponentShowState>(inPageUI.componentsShown);
+
   useEffect(() => {
+    console.log('useEffect toolbar []');
     msInPageUiStateStream.subscribe(([{ toolbar, sidebar }, sender]) => {
+      console.log('toolbar msInPageUiStateStream', toolbar, sidebar);
+      // console.log(
+      //   refState.current,
+      //   sharedInPageUiState,
+      //   refState.current == sharedInPageUiState,
+      // );
+      // console.log(
+      //   refState.current.toolbar,
+      //   toolbar,
+      //   '//',
+      //   refState.current.toolbar !== toolbar,
+      //   refState.current.sidebar !== sidebar,
+      // );
+      // if (
+      //   refState.current.toolbar !== toolbar ||
+      //   refState.current.sidebar !== sidebar
+      // )
       setSharedInPageUiState({ toolbar, sidebar });
     });
   }, []);

@@ -11,6 +11,7 @@ export const [
   msWaitForComponentInit,
 ] = getMessage<{
   component: ContentScriptComponent;
+  scriptSender: ContentScriptComponent;
 }>('COMPONENT_INIT');
 
 export const [

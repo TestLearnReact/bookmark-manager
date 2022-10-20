@@ -14,24 +14,30 @@ export interface SidebarContainerDependencies {
   watermelonDb: Database;
 }
 
+let root: null | ReactDOM.Root = null;
+
 export function setupFrontendSidebar(
   mount: InPageUIRootMount,
   dependencies: SidebarContainerDependencies,
 ): void {
-  const root = ReactDOM.createRoot(mount.rootElement as HTMLElement);
+  // document.addEventListener('DOMContentLoaded', function (event) {
+  if (!root) {
+    root = ReactDOM.createRoot(mount.rootElement as HTMLElement);
 
-  root.render(
-    <React.StrictMode>
+    root.render(
+      // render twice react 18 ???
+      // <React.StrictMode>
       <StyleSheetManager target={mount.shadowRoot as any}>
         <ThemeProviderContext>
           <DatabaseProvider database={dependencies.watermelonDb}>
             <SidebarHolderContainer dependencies={dependencies} />
           </DatabaseProvider>
         </ThemeProviderContext>
-      </StyleSheetManager>
-    </React.StrictMode>,
-    // mount.rootElement,
-  );
+      </StyleSheetManager>,
+      // </React.StrictMode>,
+    );
+  }
+  // });
 }
 
 export function destroyFrontendSidebar(

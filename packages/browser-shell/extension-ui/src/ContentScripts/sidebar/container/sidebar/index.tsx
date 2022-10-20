@@ -17,9 +17,11 @@ import {
 import { Sidebar } from '../../components/sidebar';
 
 import * as S from './styles';
+import { BookmarkModel, Query } from '@workspace/extension-base';
 
 interface SidebarHolderProps {
   dependencies: SidebarContainerDependencies;
+  bookmarkQuery: Query<BookmarkModel>;
 }
 
 const SidebarContainer: React.FC<SidebarHolderProps> = ({ dependencies }) => {
@@ -43,7 +45,7 @@ const SidebarContainer: React.FC<SidebarHolderProps> = ({ dependencies }) => {
 
   useEffect(() => {
     msInPageUiStateStream.subscribe(([{ toolbar, sidebar }]) => {
-      console.log(sharedInPageUiState);
+      console.log('sidebar msInPageUiStateStream', sharedInPageUiState);
       setSharedInPageUiState({ toolbar, sidebar });
     });
   }, []);

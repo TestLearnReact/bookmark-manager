@@ -1,4 +1,5 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb';
+import { TableName } from '../types';
 
 export const schema = appSchema({
   version: 1,
@@ -20,6 +21,14 @@ export const schema = appSchema({
         { name: 'body', type: 'string' },
         { name: 'post_id', type: 'string', isIndexed: true },
         { name: 'is_pinned', type: 'boolean' },
+      ],
+    }),
+    tableSchema({
+      name: TableName.BOOKMARKS,
+      columns: [
+        { name: 'url', type: 'string', isIndexed: true },
+        { name: 'normalized_url', type: 'string', isIndexed: true },
+        { name: 'title', type: 'string' },
       ],
     }),
   ],

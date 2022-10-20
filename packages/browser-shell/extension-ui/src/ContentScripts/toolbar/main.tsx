@@ -14,24 +14,31 @@ export interface ToolbarContainerDependencies {
   watermelonDb: Database;
 }
 
-export function setupFrontendToolbar(
+let root: null | ReactDOM.Root = null;
+
+export async function setupFrontendToolbar(
   mount: InPageUIRootMount,
   dependencies: ToolbarContainerDependencies,
-): void {
-  const root = ReactDOM.createRoot(mount.rootElement as HTMLElement);
+): Promise<void> {
+  // document.addEventListener('DOMContentLoaded', function (event) {
+  if (!root) {
+    root = ReactDOM.createRoot(mount.rootElement as HTMLElement);
 
-  root.render(
-    <React.StrictMode>
+    root.render(
+      // render twice react 18 ???
+      // <React.StrictMode>
       <StyleSheetManager target={mount.rootElement as any}>
         <ThemeProviderContext>
           <DatabaseProvider database={dependencies.watermelonDb}>
             <ToolbarHolderContainer dependencies={dependencies} />
           </DatabaseProvider>
         </ThemeProviderContext>
-      </StyleSheetManager>
-    </React.StrictMode>,
-    // mount.rootElement,
-  );
+      </StyleSheetManager>,
+      // </React.StrictMode>,
+      // mount.rootElement,
+    );
+  }
+  // });
 }
 
 export function destroyFrontendToolbar(

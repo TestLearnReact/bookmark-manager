@@ -41,7 +41,7 @@ export const toolbarMain: ToolbarScriptMain = async (dependencies) => {
 
   const setUp = async () => {
     createMount();
-    setupFrontendToolbar(mount, {
+    await setupFrontendToolbar(mount, {
       ...dependencies,
     });
   };

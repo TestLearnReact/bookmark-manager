@@ -4,10 +4,16 @@ import IconClose from '~icons/public-assets-icons/close.svg';
 import IconOpenSidebar from '~icons/public-assets-icons/openSidebar.svg';
 import IconAsleep from '~icons/public-assets-icons/asleep.svg';
 import IconAsleepFilled from '~icons/public-assets-icons/asleepFilled.svg';
-// import { useThemeContext, SvgTooltipComponent } from '~extension-ui';
-import { useThemeContext, SvgTooltipComponent } from '../../../../../common';
+import IconFavorite from '~icons/public-assets-icons/favorite.svg';
+import IconfavoriteFilled from '~icons/public-assets-icons/favoriteFilled.svg';
+import {
+  useThemeContext,
+  SvgTooltipComponent,
+} from '@workspace/extension-ui/common';
 
 import { ToolbarSidebarProps } from '../../toolbar';
+import ToggleBookmark from '../toggleBookmark';
+import { useDatabase } from '@workspace/extension-base';
 
 export interface IToolbarActionsProps {
   sidebar: ToolbarSidebarProps;
@@ -27,6 +33,8 @@ const ToolbarActions: React.FC<IToolbarActionsProps> = ({
   const getTooltipText = (name: string): string => {
     return name;
   };
+
+  // const database = useDatabase();
 
   return (
     <div className='generalActions'>
@@ -65,6 +73,11 @@ const ToolbarActions: React.FC<IToolbarActionsProps> = ({
         }}
         onClick={() => toggleTheme()}
       />
+      {/* <ToggleBookmark
+        getTooltipText={getTooltipText}
+        toggleBookmark={() => 'l'}
+        database={database}
+      /> */}
     </div>
   );
 };

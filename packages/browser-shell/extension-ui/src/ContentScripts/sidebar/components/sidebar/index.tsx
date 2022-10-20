@@ -1,10 +1,17 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import * as S from './styles';
 
 import IconClose from '~icons/public-assets-icons/close.svg';
 import { TooltipButtonIcon } from '../../../../common';
 
 import styles from './Button.module.css';
+import BookmarkList from '../BookmarkList';
+import {
+  BookmarkModel,
+  Query,
+  TableName,
+  useDatabase,
+} from '@workspace/extension-base';
 
 export const Sidebar: React.FC = () => {
   return (
@@ -18,7 +25,8 @@ export const Sidebar: React.FC = () => {
           onClick={() => console.log('...')}
         />
       </SidbarTopBar>
-      <S.Content>.. Content ..</S.Content>
+      {/* <S.Content>.. Content ..</S.Content> */}
+      {/* <BookmarkList bookmarks={[]} /> */}
 
       <CssModuleTestButton>.</CssModuleTestButton>
     </S.Container>

@@ -20,11 +20,13 @@
     "format": "prettier --write ./**/*.{js,jsx,ts,tsx,css,md,json} --config ../../../.prettierrc"
   },
   "dependencies": {
-    "@workspace/extension-common": "*",
+    "@nozbe/with-observables": "^1.4.1",
     "@workspace/extension-base": "*",
+    "@workspace/extension-common": "*",
     "classnames": "^2.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "recompose": "^0.30.0",
     "styled-components": "^5.3.6",
     "webextension-polyfill": "^0.10.0"
   },

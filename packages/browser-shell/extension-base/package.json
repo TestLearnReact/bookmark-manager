@@ -15,7 +15,8 @@
   "dependencies": {
     "@nozbe/watermelondb": "^0.24.0",
     "@nozbe/with-observables": "^1.4.1",
-    "@workspace/extension-common": "*"
+    "@workspace/extension-common": "*",
+    "lokijs": "^1.5.12"
   },
   "devDependencies": {}
 }

@@ -3,7 +3,7 @@ import { Database } from '@nozbe/watermelondb';
 // import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite';
 import LokiJSAdapter from '@nozbe/watermelondb/adapters/lokijs';
 
-import { PostModel, CommentModel } from './model';
+import { PostModel, CommentModel, BookmarkModel } from './model';
 
 import { schema } from './schema';
 import migrations from './model/migrations';
@@ -63,7 +63,7 @@ export const genWatermelonDb = async ({
     migrations,
     useWebWorker: false,
     useIncrementalIndexedDB: true,
-    // dbName: 'myapp', // optional db name
+    dbName: dbName, // optional db name
 
     // --- Optional, but recommended event handlers:
 
@@ -93,6 +93,7 @@ export const genWatermelonDb = async ({
   const database = new Database({
     adapter,
     modelClasses: [
+      BookmarkModel,
       PostModel,
       CommentModel, // ⬅️ You'll add Models to Watermelon here
     ],
