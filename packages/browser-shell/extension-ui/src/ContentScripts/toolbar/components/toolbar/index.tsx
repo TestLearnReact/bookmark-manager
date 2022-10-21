@@ -9,14 +9,20 @@ import { _DEV_OPTIONS, useThemeContext } from '../../../../common';
 
 import './styles.scss';
 
-export interface ToolbarSubcomponentProps {
-  sidebar: ToolbarSidebarProps;
-}
-export interface ToolbarSidebarProps {
+export interface IToolbarSidebarProps {
   isSidebarOpen: boolean;
   openSidebar: () => void;
   closeSidebar: () => void;
   toggleSidebar: () => void;
+}
+
+export interface IToolbarBookmarkProps {
+  toggleBookmark: () => void;
+}
+
+export interface ToolbarSubcomponentProps {
+  sidebar: IToolbarSidebarProps;
+  bookmark: IToolbarBookmarkProps;
 }
 
 interface IToolbarProps extends ToolbarSubcomponentProps {
@@ -35,6 +41,7 @@ const Toolbar: React.FC<IToolbarProps> = (props) => {
     handleRemoveToolbar,
     sharedInPageUiState,
     sidebar,
+    bookmark,
   } = props;
 
   const { themeType, setCurrentTheme } = useThemeContext();
@@ -67,6 +74,7 @@ const Toolbar: React.FC<IToolbarProps> = (props) => {
           <>
             <ToolbarActions
               sidebar={sidebar}
+              bookmark={bookmark}
               handleRemoveToolbar={handleRemoveToolbar}
               toggleSidebar={toggleSidebar}
               toggleTheme={() =>

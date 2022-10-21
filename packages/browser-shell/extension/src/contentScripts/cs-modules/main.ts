@@ -44,6 +44,12 @@ const csMainModule = async (
     dbName: 'SharedFrontendWatermelonDb',
   });
 
+  try {
+    // watermelonDb.write(async () => await watermelonDb.unsafeResetDatabase());
+  } catch (error) {
+    console.log('errr');
+  }
+
   // 3. Creates an instance of the InPageUI manager class to encapsulate
   // business logic of initialising and hide/showing components.
 

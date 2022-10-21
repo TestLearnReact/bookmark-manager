@@ -11,12 +11,14 @@ import {
   SvgTooltipComponent,
 } from '@workspace/extension-ui/common';
 
-import { ToolbarSidebarProps } from '../../toolbar';
-import ToggleBookmark from '../toggleBookmark';
+import { IToolbarBookmarkProps, IToolbarSidebarProps } from '../../toolbar';
+
 import { useDatabase } from '@workspace/extension-base';
+import ToggleBookmark from '../toggleBookmark';
 
 export interface IToolbarActionsProps {
-  sidebar: ToolbarSidebarProps;
+  sidebar: IToolbarSidebarProps;
+  bookmark: IToolbarBookmarkProps;
   handleRemoveToolbar: () => void;
   toggleSidebar: () => void;
   toggleTheme: () => void;
@@ -24,6 +26,7 @@ export interface IToolbarActionsProps {
 
 const ToolbarActions: React.FC<IToolbarActionsProps> = ({
   sidebar,
+  bookmark,
   handleRemoveToolbar,
   toggleSidebar,
   toggleTheme,
@@ -73,11 +76,10 @@ const ToolbarActions: React.FC<IToolbarActionsProps> = ({
         }}
         onClick={() => toggleTheme()}
       />
-      {/* <ToggleBookmark
+      <ToggleBookmark
         getTooltipText={getTooltipText}
-        toggleBookmark={() => 'l'}
-        database={database}
-      /> */}
+        toggleBookmark={() => bookmark.toggleBookmark()}
+      />
     </div>
   );
 };

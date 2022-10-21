@@ -1,8 +1,3 @@
-import {
-  BookmarkModel,
-  TableName,
-  useDatabase,
-} from '@workspace/extension-base';
 import React from 'react';
 import { SidebarContainerDependencies } from '../../main';
 
@@ -16,8 +11,6 @@ const SidebarHolderContainer: React.FC<SidebarHolderContainerProps> = ({
   dependencies,
 }) => {
   console.log('r.e.r.e.n.d.e.r SidebarHolderContainer');
-
-  // const database = useDatabase();
 
   return (
     <div className='_sidebarHolderContainer'>

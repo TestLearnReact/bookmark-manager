@@ -17,11 +17,9 @@ import {
 import { Sidebar } from '../../components/sidebar';
 
 import * as S from './styles';
-import { BookmarkModel, Query } from '@workspace/extension-base';
 
 interface SidebarHolderProps {
   dependencies: SidebarContainerDependencies;
-  bookmarkQuery: Query<BookmarkModel>;
 }
 
 const SidebarContainer: React.FC<SidebarHolderProps> = ({ dependencies }) => {
@@ -65,6 +63,7 @@ const SidebarContainer: React.FC<SidebarHolderProps> = ({ dependencies }) => {
 
   if (!sharedInPageUiState.sidebar && !_DEV_OPTIONS.DEV_SDEBAR_OPEN)
     return null;
+
   return (
     <>
       {/* Theme styled-component */}
@@ -91,7 +90,7 @@ const SidebarContainer: React.FC<SidebarHolderProps> = ({ dependencies }) => {
             className='ContainerStyled _outerContainerStyled'
           >
             <S.InnerContainerStyled className='_innerContainerStyled'>
-              <Sidebar />
+              <Sidebar inPageUI={inPageUI} />
             </S.InnerContainerStyled>
           </S.OuterContainerStyled>
 

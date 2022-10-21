@@ -10,6 +10,14 @@ import { useThemeContext } from '../../../../common/context';
 import { darkTheme, lightTheme, ThemeProvider } from '../../../../common';
 
 import Toolbar from '../../components/toolbar';
+import {
+  BookmarkModel,
+  createBookmark,
+  isBookmarked,
+  Q,
+  TableName,
+  useDatabase,
+} from '@workspace/extension-base';
 
 interface IToolbarContainer {
   dependencies: ToolbarContainerDependencies;
@@ -29,34 +37,75 @@ const ToolbarContainer: React.FC<IToolbarContainer> = ({
   const [sharedInPageUiState, setSharedInPageUiState] =
     useState<InPageUIComponentShowState>(inPageUI.componentsShown);
 
-  const refState = useRef<InPageUIComponentShowState>(inPageUI.componentsShown);
+  // const refState = useRef<InPageUIComponentShowState>(inPageUI.componentsShown);
 
   useEffect(() => {
     console.log('useEffect toolbar []');
     msInPageUiStateStream.subscribe(([{ toolbar, sidebar }, sender]) => {
       console.log('toolbar msInPageUiStateStream', toolbar, sidebar);
-      // console.log(
-      //   refState.current,
-      //   sharedInPageUiState,
-      //   refState.current == sharedInPageUiState,
-      // );
-      // console.log(
-      //   refState.current.toolbar,
-      //   toolbar,
-      //   '//',
-      //   refState.current.toolbar !== toolbar,
-      //   refState.current.sidebar !== sidebar,
-      // );
-      // if (
-      //   refState.current.toolbar !== toolbar ||
-      //   refState.current.sidebar !== sidebar
-      // )
       setSharedInPageUiState({ toolbar, sidebar });
     });
   }, []);
 
   const handleSidebarOpen = () => {
     inPageUI.showSidebar();
+  };
+
+  const database = useDatabase();
+
+  const url = () => window.location.href;
+  const normalizedUrl = window.location.href;
+  const title = document.title;
+
+  const toggleBookmark = async () => {
+    const is = await isBookmarked({ database, url: window.location.href });
+    // const is = await database
+    //   .get<BookmarkModel>('bookmarks')
+    //   .query(Q.where('url', Q.eq('https://www.google.com/')))
+    //   .fetch();
+
+    console.log('iss', is);
+
+    await createBookmark({
+      database,
+      fields: {
+        url: url(),
+        normalizedUrl: window.location.href,
+        title: document.title,
+      },
+    });
+    // console.log(window.location.href);
+    // const url = window.location.href;
+    // const isBookmarked = await database.collections
+    //   .get<BookmarkModel>(TableName.BOOKMARKS)
+    //   .query(Q.where('url', url))
+    //   .fetch();
+
+    // if (!isBookmarked[0]) {
+    //   console.log('create', isBookmarked[0], isBookmarked);
+    //   await database.write(async (writer) => {
+    //     const bookmark = await database.collections
+    //       .get<BookmarkModel>(TableName.BOOKMARKS)
+    //       .create((b) => {
+    //         (b.url = window.location.href),
+    //           (b.normalizedUrl = window.location.href),
+    //           (b.title = document.title);
+    //       });
+    //     return bookmark;
+    //   });
+    // }
+
+    // if (isBookmarked[0]) {
+    //   console.log('delete', isBookmarked[0]);
+    //   await database.write(async (writer) => {
+    //     const del = await database.collections
+    //       .get<BookmarkModel>(TableName.BOOKMARKS)
+    //       .query(Q.where('url', window.location.href))
+    //       .markAllAsDeleted();
+
+    //     return del;
+    //   });
+    // }
   };
 
   //  if (!sharedInPageUiState.toolbar) return null;
@@ -84,6 +133,7 @@ const ToolbarContainer: React.FC<IToolbarContainer> = ({
               closeSidebar: () => inPageUI.hideSidebar(),
               toggleSidebar: () => inPageUI.toggleSidebar(),
             }}
+            bookmark={{ toggleBookmark: () => toggleBookmark() }}
           />
         </div>
       </ThemeProvider>
