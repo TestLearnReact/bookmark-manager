@@ -16,10 +16,10 @@ export interface ToolbarContainerDependencies {
 
 let root: null | ReactDOM.Root = null;
 
-export async function setupFrontendToolbar(
+export function setupFrontendToolbar(
   mount: InPageUIRootMount,
   dependencies: ToolbarContainerDependencies,
-): Promise<void> {
+): void {
   // document.addEventListener('DOMContentLoaded', function (event) {
   if (!root) {
     root = ReactDOM.createRoot(mount.rootElement as HTMLElement);

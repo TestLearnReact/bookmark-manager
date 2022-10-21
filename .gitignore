@@ -16,6 +16,8 @@ extension-vite
 *.local
 todo.txt
 README.md
+*/browser-shell/**/tsconfig.tsbuildinfo
+
 
 # Editor directories and files
 .vscode/*

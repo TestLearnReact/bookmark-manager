@@ -21,6 +21,7 @@ export function setupFrontendSidebar(
   dependencies: SidebarContainerDependencies,
 ): void {
   // document.addEventListener('DOMContentLoaded', function (event) {
+  // React 18 dev bugs!?
   if (!root) {
     root = ReactDOM.createRoot(mount.rootElement as HTMLElement);
 

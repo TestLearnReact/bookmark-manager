@@ -2,6 +2,7 @@ import browser from 'webextension-polyfill';
 import {
   msComponentInitStream,
   msComponentDestroyStream,
+  msWaitForComponentInit,
 } from '@workspace/extension-common';
 import {
   InPageUIRootMount,
@@ -31,6 +32,12 @@ export const sidebarMain: SidebarScriptMain = async (dependencies) => {
     console.log('SIDEBAR -> S ETU P <-', component);
     await setUp();
   });
+
+  // msWaitForComponentInit().then(({ component }) => {
+  //   if (component !== 'sidebar') return;
+  //   console.log('SIDEBAR -> S ETU P <-', component);
+  //   setUp();
+  // });
 
   msComponentDestroyStream.subscribe(async ([{ component }, sender]) => {
     if (component !== 'sidebar') return;

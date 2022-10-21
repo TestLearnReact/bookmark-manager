@@ -1,6 +1,7 @@
 import {
   msComponentDestroyStream,
   msComponentInitStream,
+  msWaitForComponentInit,
 } from '@workspace/extension-common';
 import {
   createInPageUI,
@@ -26,7 +27,9 @@ export const toolbarMain: ToolbarScriptMain = async (dependencies) => {
   };
   createMount();
 
-  msComponentInitStream.subscribe(async ([{ component }, sender]) => {
+  // msWaitForComponentInit().then(() => console.log('ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ'));
+
+  msComponentInitStream.subscribe(async ([{ component }]) => {
     if (component !== 'toolbar') return;
     console.log('TOOLBAR -> S ETU P <-', component);
 
@@ -35,13 +38,13 @@ export const toolbarMain: ToolbarScriptMain = async (dependencies) => {
 
   msComponentDestroyStream.subscribe(async ([{ component }, sender]) => {
     if (component !== 'toolbar') return;
-    console.log('TOOLBAR -> DESTROY <-', component);
+    console.log('TOOLBAR -> DESTROY <-', component, sender);
     destroy();
   });
 
   const setUp = async () => {
     createMount();
-    await setupFrontendToolbar(mount, {
+    setupFrontendToolbar(mount, {
       ...dependencies,
     });
   };
