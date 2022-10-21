@@ -5,6 +5,9 @@
     "outDir": "./dist",
     "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
-  "references": [{ "path": "../extension-common" },{ "path": "../extension-base" }],
+  "references": [
+    { "path": "../extension-common" },
+    { "path": "../extension-base" }
+  ],
   "include": ["./src/**/*"]
 }

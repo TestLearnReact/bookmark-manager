@@ -25,8 +25,8 @@
         "@workspace/extension-ui/*": ["packages/browser-shell/extension-ui/src/*"],
         "@workspace/extension-common": ["packages/browser-shell/extension-common/src"],
         "@workspace/extension-common/*": ["packages/browser-shell/extension-common/src/*"],
-        "@workspace/extension-base": ["packages/browser-shell/extension-base/src"],
-        "@workspace/extension-base/*": ["packages/browser-shell/extension-base/src/*"]
+        "@workspace/extension-base": ["packages/browser-shell/extension-base/src/index.ts"],
+        "@workspace/extension-base/*": ["packages/browser-shell/extension-base/src/index.ts"]
        },
       "types": [
         "unplugin-icons/types/react",

@@ -74,10 +74,6 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: [
-      'webextension-polyfill',
-      '@nozbe/watermelondb',
-      '/extension-base/',
-    ], // "styled-components"  '../extension-ui/'
+    include: ['webextension-polyfill', '@nozbe/watermelondb'], // "styled-components"  '../extension-ui/'
   },
 });
