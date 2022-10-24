@@ -7,6 +7,7 @@ export const packages = [
   'extension-common',
   'extension-base',
   'extension-externals/message-system',
+  'extension-externals/watermelon-db',
 ];
 
 // alias: {

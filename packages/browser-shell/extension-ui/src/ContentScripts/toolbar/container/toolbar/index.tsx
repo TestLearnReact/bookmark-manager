@@ -17,7 +17,7 @@ import {
   Q,
   TableName,
   useDatabase,
-} from '@workspace/extension-base';
+} from '@workspace/watermelon';
 
 interface IToolbarContainer {
   dependencies: ToolbarContainerDependencies;
@@ -58,7 +58,7 @@ const ToolbarContainer: React.FC<IToolbarContainer> = ({
   const title = document.title;
 
   const toggleBookmark = async () => {
-    const is = await isBookmarked({ database, url: window.location.href });
+    const is = await isBookmarked({ database, url: url() });
     // const is = await database
     //   .get<BookmarkModel>('bookmarks')
     //   .query(Q.where('url', Q.eq('https://www.google.com/')))

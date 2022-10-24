@@ -18,6 +18,9 @@
     },
     {
       "path": "./packages/browser-shell/extension-externals/message-system"
+    },
+    {
+      "path": "./packages/browser-shell/extension-externals/watermelon-db"
     }
   ]
 }

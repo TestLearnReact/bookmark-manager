@@ -10,6 +10,9 @@ import { manifest } from './manifest.vite';
 import { isDev, OUTDIR_VITE_NAME, resRoot, resSrc } from '../shared';
 import { aliasVite, getAlias } from '../shared/sharedConfig';
 
+import babel from 'vite-plugin-babel';
+import legacy from '@vitejs/plugin-legacy';
+
 export default defineConfig({
   resolve: {
     alias: getAlias(aliasVite),
@@ -22,6 +25,9 @@ export default defineConfig({
   },
 
   plugins: [
+    // legacy({
+    //   targets: ['defaults', 'not IE 11'],
+    // }),
     Icons({
       compiler: 'jsx',
       jsx: 'react',
@@ -49,7 +55,13 @@ export default defineConfig({
         ),
       },
     }),
-    react(),
+    react({
+      babel: {
+        parserOpts: {
+          plugins: [['decorators-legacy', { legacy: true }]],
+        },
+      },
+    }),
     crx({ manifest }),
     AutoImport({
       imports: [
@@ -74,6 +86,10 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ['webextension-polyfill', '@nozbe/watermelondb'], // "styled-components"  '../extension-ui/'
+    include: [
+      'webextension-polyfill',
+      '@nozbe/watermelondb',
+      '@nozbe/watermelondb/adapters/lokijs',
+    ], // "styled-components"  '../extension-ui/'
   },
 });

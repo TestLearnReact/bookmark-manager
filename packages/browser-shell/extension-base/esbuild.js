@@ -2,6 +2,8 @@
 // const { dependencies } = require("./package.json");
 
 import { build } from 'esbuild';
+import alias from 'esbuild-plugin-alias';
+import path from 'path';
 
 // const define = {};
 
@@ -14,6 +16,7 @@ import { build } from 'esbuild';
 // const external = Object.entries(dependencies).map(([key]) => key);
 
 const sharedConfig = {
+  alias: '',
   bundle: true,
   entryPoints: ['src/index.ts'],
   // platform: "node",
@@ -32,6 +35,13 @@ async function buildCommon() {
     ...sharedConfig,
     format: 'cjs',
     outfile: 'dist/index.cjs.js',
+    plugins: [
+      alias({
+        '@workspace/extension-common': path.resolve(
+          '../extension-common/src/index.ts',
+        ),
+      }),
+    ],
   });
 }
 
@@ -40,6 +50,13 @@ async function buildEsm() {
     ...sharedConfig,
     format: 'esm',
     outfile: 'dist/index.es.js',
+    plugins: [
+      alias({
+        '@workspace/extension-common': path.resolve(
+          '../extension-common/src/index.ts',
+        ),
+      }),
+    ],
   });
 }
 

@@ -7,7 +7,8 @@
   },
   "references": [
     { "path": "../extension-common" },
-    { "path": "../extension-base" }
+    { "path": "../extension-base" },
+    { "path": "../extension-externals/watermelon-db" }
   ],
   "include": ["./src/**/*"]
 }

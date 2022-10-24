@@ -2,7 +2,7 @@
   "name": "@workspace/message-system",
   "displayName": "message-system",
   "version": "0.0.0",
-  "description": "message-system browser extension",
+  "description": "message-system",
   "license": "MIT",
   "sideEffects": true,
   "type": "module",

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { SvgTooltipComponent } from '@workspace/extension-ui/common';
 
@@ -12,106 +12,73 @@ import {
   Database,
   ExtractedObservables,
   TableName,
-  useDatabase,
-  withDatabase,
-} from '@workspace/extension-base';
+  Q,
+  deleteBookmarkByUrl,
+  createBookmark,
+} from '@workspace/watermelon';
 import withObservables from '@nozbe/with-observables';
 
-// interface IToggleBookmark
-//   extends ExtractedObservables<ReturnType<typeof getObservables>> {
-//   toggleBookmark: () => void;
-//   getTooltipText: (test: string) => string;
-//   database: Database;
-// }
+const getObservables = ({
+  database,
+  pageData,
+}: {
+  database: Database;
+  pageData: { url: () => string; title: () => string };
+}) => ({
+  bookmark: database.collections
+    .get<BookmarkModel>(TableName.BOOKMARKS)
+    .query(Q.where('url', pageData.url()))
+    .observe(),
+});
 
-// const getObservables = ({ database }: { database: Database }) => ({
-//   bookmark: database.collections.get(TableName.BOOKMARKS).query().observe(),
-// });
-
-interface IToggleBookmark {
+interface IToggleBookmark
+  extends ExtractedObservables<ReturnType<typeof getObservables>> {
   toggleBookmark: () => void;
   getTooltipText: (test: string) => string;
-  // database: Database;
+  database: Database;
+  pageData: { url: () => string; title: () => string };
 }
 
 const ToggleBookmark: React.FC<IToggleBookmark> = ({
   toggleBookmark,
   getTooltipText,
+  bookmark,
+  database,
+  pageData,
 }) => {
-  const getPageUrl = () => window.location.href;
-  const getPageTitle = () => document.title;
-  const isBookmarked = false;
+  const isBookmarked = Array.isArray(bookmark) && bookmark.length > 0;
 
-  // const database = useDatabase();
+  const toggle = async () => {
+    const isBookmarked = Array.isArray(bookmark) && bookmark.length > 0;
 
-  // console.log(database);
-
-  //   const toggle = async () => {
-  //     const newB = await database.write(async () => {
-  //       const newBookmark = await database
-  //         .get<BookmarkModel>(TableName.BOOKMARKS)
-  //         .create((bookmark) => {
-  //           bookmark.url = window.location.href;
-  //           bookmark.title = document.title;
-  //         });
-  //       return newBookmark;
-  //     });
-  //     console.log(newB);
-  //     return newB;
-  //     // database.write(async (writer) => {
-  //     //   // const isBookmarked = await database.collections
-  //     //   //   .get<BookmarkModel>(TableName.BOOKMARKS)
-  //     //   //   .getBookmarkByUrl({ url: getPageUrl() });
-  //     //   const test = await writer.callWriter(() => bookmark.createBookmark());
-  //     //   const isBookmarked = writer.getBookmarkByUrl({ url: getPageUrl() });
-  //     // });
-  //     // if (isBookmarked)
-  //     //   bookmark.createBookmark({
-  //     //     url: getPageUrl(),
-  //     //     normalizedUrl: getPageUrl(),
-  //     //     title: getPageTitle(),
-  //     //   });
-  //     // !isBookmarked && bookmark.deleteBookmark({ url: getPageUrl() });
-  //   };
+    if (!isBookmarked) {
+      createBookmark({
+        database,
+        fields: {
+          url: pageData.url(),
+          normalizedUrl: pageData.url(),
+          title: pageData.title(),
+        },
+      });
+    }
+    if (isBookmarked) {
+      deleteBookmarkByUrl({ database, url: pageData.url() });
+    }
+  };
 
   return (
     <SvgTooltipComponent
       iconProps={{
-        icon: isBookmarked ? IconFavorite : IconfavoriteFilled,
+        icon: isBookmarked ? IconfavoriteFilled : IconFavorite,
         className: 'ignore-react-onclickoutside',
       }}
       tooltipProps={{
-        tooltipText: getTooltipText('Toggle theme'),
+        tooltipText: getTooltipText('Toggle bookmark'),
         position: 'leftNarrow',
       }}
-      onClick={() => toggleBookmark()}
+      onClick={() => toggle()}
     />
   );
 };
 
-// export default compose(
-//   withDatabase,
-//   withObservables([], ({ database }: { database: Database }) => ({
-//     bookmark: database.get('bookmarks').query(),
-//   })),
-// )(ToggleBookmark);
-
-export default ToggleBookmark;
-// export default withObservables(['database'], getObservables)(ToggleBookmark);
-
-// // // database.collections
-// // //   .get<BookmarkModel>(TableName.BOOKMARKS)
-// // //   .create((bookmark) => {});
-
-// // // database.write(async writer => {
-// // //     const post = await database.get<BookmarkModel>(TableName.BOOKMARKS).find('abcdef')
-// // //     //await writer.callWriter(() => post.createBookmark() ,
-// // //     await writer.callWriter(() => bookmark.createBookmark()
-// // //   })
-
-// // database.write(async (writer) => {
-// //   writer.call;
-// //   // await database.collections
-// //   //   .get<BookmarkModel>(TableName.BOOKMARKS)
-// //   //   .createBookmark({});
-// // });
+export default withObservables(['database'], getObservables)(ToggleBookmark);

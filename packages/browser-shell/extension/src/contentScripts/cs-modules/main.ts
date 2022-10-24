@@ -1,4 +1,4 @@
-import { genWatermelonDb } from '@workspace/extension-base';
+import { genWatermelonDb } from '@workspace/watermelon';
 import {
   msSendComponentInit,
   msSendInjectScript,
@@ -41,11 +41,11 @@ const csMainModule = async (
 
   // 2. Initialise dependencies required by content scripts
   const watermelonDb = await genWatermelonDb({
-    dbName: 'SharedFrontendWatermelonDb',
+    dbName: 'SharedFrontendWatermelonDb2',
   });
 
   try {
-    // watermelonDb.write(async () => await watermelonDb.unsafeResetDatabase());
+    watermelonDb.write(async () => await watermelonDb.unsafeResetDatabase());
   } catch (error) {
     console.log('errr');
   }

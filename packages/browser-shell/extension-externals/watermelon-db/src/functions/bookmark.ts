@@ -1,7 +1,6 @@
 import { Database, Q } from '@nozbe/watermelondb';
 import { type BookmarkModel } from '../model';
 import { TableName } from '../types';
-// import { Database, Q } from '../watermelonFuncsAndTypes';
 
 export async function isBookmarked({
   database,
@@ -10,14 +9,12 @@ export async function isBookmarked({
   database: Database;
   url: string;
 }) {
-  console.log('...+#.', url, ' ?? ', Q.sanitizeLikeString(url));
-
-  const find = await database.collections
+  const bookmarks = await database.collections
     .get<BookmarkModel>(TableName.BOOKMARKS)
-    .query(Q.where('url', Q.like(`%${url}%`)))
+    .query(Q.where('url', url))
     .fetch();
 
-  return find;
+  return Array.isArray(bookmarks) && bookmarks.length > 0;
 }
 
 export const createBookmark = async ({

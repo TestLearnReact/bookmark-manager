@@ -13,7 +13,7 @@ import {
 
 import { IToolbarBookmarkProps, IToolbarSidebarProps } from '../../toolbar';
 
-import { useDatabase } from '@workspace/extension-base';
+import { useDatabase } from '@workspace/watermelon';
 import ToggleBookmark from '../toggleBookmark';
 
 export interface IToolbarActionsProps {
@@ -37,7 +37,10 @@ const ToolbarActions: React.FC<IToolbarActionsProps> = ({
     return name;
   };
 
-  // const database = useDatabase();
+  const database = useDatabase();
+
+  const getPageUrl = () => window.location.href;
+  const getPageTitle = () => document.title;
 
   return (
     <div className='generalActions'>
@@ -79,6 +82,8 @@ const ToolbarActions: React.FC<IToolbarActionsProps> = ({
       <ToggleBookmark
         getTooltipText={getTooltipText}
         toggleBookmark={() => bookmark.toggleBookmark()}
+        database={database}
+        pageData={{ url: () => getPageUrl(), title: () => getPageTitle() }}
       />
     </div>
   );

@@ -1,0 +1,12 @@
+{
+  "extends": "../../../../tsconfig.settings.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false, 
+    "emitDeclarationOnly": false
+  },
+  "include": ["./src/**/*"]
+}
