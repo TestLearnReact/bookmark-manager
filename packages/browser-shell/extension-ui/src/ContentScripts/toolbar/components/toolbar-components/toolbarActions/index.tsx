@@ -13,7 +13,7 @@ import {
 
 import { IToolbarBookmarkProps, IToolbarSidebarProps } from '../../toolbar';
 
-import { useDatabase } from '@workspace/watermelon';
+import { useDatabase } from '@workspace/watermelon-db';
 import ToggleBookmark from '../toggleBookmark';
 
 export interface IToolbarActionsProps {
@@ -43,7 +43,7 @@ const ToolbarActions: React.FC<IToolbarActionsProps> = ({
   const getPageTitle = () => document.title;
 
   return (
-    <div className='generalActions'>
+    <div className='generalActions ignore-react-onclickoutside'>
       <SvgTooltipComponent
         iconProps={{
           icon: IconClose,

@@ -2,12 +2,13 @@
   "extends": "../../../../tsconfig.settings.json",
   "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "./dist/es",
+    "outDir": "./dist/cjs",
+    "module": "CommonJS",
     "emitDeclarationOnly": false,
-    "useDefineForClassFields": false,
+    "useDefineForClassFields": false, 
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
+    "experimentalDecorators": true
+    
   },
-  "references": [{ "path": "../../extension-common" }],
   "include": ["./src/**/*"]
 }

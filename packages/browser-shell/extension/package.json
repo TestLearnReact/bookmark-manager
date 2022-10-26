@@ -23,6 +23,7 @@
     "@workspace/extension-ui": "*",
     "@workspace/extension-common": "*",
     "@workspace/extension-base": "*",
+    "@workspace/watermelon-db": "*",
     "webextension-polyfill": "^0.10.0"
   },
   "devDependencies": {

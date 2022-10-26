@@ -28,9 +28,9 @@ export const TooltipButtonIcon: React.FC<IPropsStyledComponentsSvg> = ({
     <ButtonTooltip
       tooltipText={tooltipText}
       position={position}
-      className='ignore-react-onclickoutside'
+      className='_button-tooltip ignore-react-onclickoutside'
     >
-      <div onClick={onClick} className='s-container'>
+      <div onClick={onClick} className='_TooltipButtonIcon s-container'>
         <Icon {...iconProps} />
       </div>
     </ButtonTooltip>

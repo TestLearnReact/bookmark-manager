@@ -6,6 +6,15 @@
       color: t(iconColor);
     }
 
+    .svg {
+      pointer-events: none;
+  }
+  
+      .path {
+          pointer-events: none;
+      }
+
+
     width: 18px;
     height: 20px;
     background-size: contain;

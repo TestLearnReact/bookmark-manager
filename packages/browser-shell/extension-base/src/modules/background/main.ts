@@ -1,11 +1,13 @@
 import browser, { Runtime } from 'webextension-polyfill';
 import { TabManagementBackground } from '../tab-management';
-// import { TabManagementBackground } from '../..';
-// import { genNewDatabase } from '@project/app-backend'; // todo utils?
+import { Database, genWatermelonDb } from '@workspace/watermelon-db';
 
 export class MainModuleBackground {
   private runtimeAPI: Runtime.Static;
   private tabManagementBackground: TabManagementBackground;
+
+  static database: Database;
+  static dbName: 'WatermelonDbBackgound';
 
   constructor({
     runtimeAPI = browser.runtime,
@@ -18,9 +20,16 @@ export class MainModuleBackground {
     this.tabManagementBackground = tabManagementBackground;
   }
 
+  public async getWatermelonDb() {
+    return MainModuleBackground.database;
+  }
+
   private async handleInstallLogic(now = Date.now()) {
     console.log('- Install Logic -', now);
-    // const database = await genNewDatabase('background-database-persist');
+    const database = await genWatermelonDb({
+      dbName: MainModuleBackground.dbName,
+    });
+    MainModuleBackground.database = database;
     // await database.write(async () => {
     //   await database.unsafeResetDatabase();
     // });

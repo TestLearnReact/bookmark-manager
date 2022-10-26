@@ -118,7 +118,7 @@ const constants = {
   paddingRight: '0',
 
   toolbarWidth: '30px',
-  toolbarWidtExpanded: '40px',
+  toolbarWidtExpanded: '41px',
 
   sidebarOuterWidth: '350px',
 };

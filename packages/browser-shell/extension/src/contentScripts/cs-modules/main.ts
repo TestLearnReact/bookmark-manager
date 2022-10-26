@@ -1,7 +1,8 @@
-import { genWatermelonDb } from '@workspace/watermelon';
+import { genWatermelonDb, mySync } from '@workspace/watermelon-db';
 import {
   msSendComponentInit,
   msSendInjectScript,
+  msSendPushArgsStream,
   Resolvable,
   resolvablePromise,
 } from '@workspace/extension-common';
@@ -10,6 +11,7 @@ import {
   SidebarContainerDependencies,
   ToolbarContainerDependencies,
 } from '@workspace/extension-ui';
+
 import {
   ContentScriptComponent,
   ContentScriptRegistry,
@@ -49,6 +51,16 @@ const csMainModule = async (
   } catch (error) {
     console.log('errr');
   }
+
+  msSendPushArgsStream.subscribe(
+    async ([{ changes, lastPulledAt }, sender]) => {
+      console.log('sync ?????: ', changes, lastPulledAt);
+      await mySync({
+        database: watermelonDb,
+        pullBridgeFromBackground: { changes, lastPulledAt },
+      });
+    },
+  );
 
   // 3. Creates an instance of the InPageUI manager class to encapsulate
   // business logic of initialising and hide/showing components.

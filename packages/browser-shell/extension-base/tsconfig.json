@@ -6,6 +6,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
-  "references": [{ "path": "../extension-common" }],
+  "references": [{ "path": "../extension-common" },{ "path": "../extension-externals/watermelon-db" }],
   "include": ["./src/**/*"]
 }

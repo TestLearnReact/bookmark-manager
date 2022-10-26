@@ -33,9 +33,12 @@ export const SvgTooltipElement = ({
     <ButtonTooltip
       tooltipText={tooltipText}
       position={position}
-      className='ignore-react-onclickoutside'
+      className='_button-tooltip ignore-react-onclickoutside'
     >
-      <div className='ignore-react-onclickoutside' onClick={onClick}>
+      <div
+        className='_svgTooltipElement ignore-react-onclickoutside'
+        onClick={onClick}
+      >
         {clonedIcon}
       </div>
     </ButtonTooltip>

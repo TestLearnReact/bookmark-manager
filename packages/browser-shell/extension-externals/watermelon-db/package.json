@@ -1,17 +1,21 @@
 {
-  "name": "@workspace/watermelon",
+  "name": "@workspace/watermelon-db",
   "displayName": "watermelonDB",
   "version": "0.0.0",
   "description": "watermelonDB",
   "license": "MIT",
   "sideEffects": true,
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "private": "true",
+  "type": "module",
+  "main": "./src/index.ts",
   "scripts": {
-    "build": "cross-env NODE_ENV=production run-s clean gen:dts",
-    "dev": "cross-env NODE_ENV=production run-s clean gen:dts:watch",
+    "build1": "cross-env NODE_ENV=production run-s clean gen:dts gen:dts:cjs",
+    "dev1": "cross-env NODE_ENV=production run-p clean gen:dts:watch gen:dts:cjs:watch",
+    "build:deps:js": "node esbuild.js",
     "gen:dts": "tsc -p tsconfig.json --declarationDir dist",
     "gen:dts:watch": "yarn run gen:dts -w",
+    "gen:dts:cjs": "tsc -p tsconfig.cjs.json --declarationDir dist",
+    "gen:dts:cjs:watch": "yarn run gen:dts:cjs -w",
     "clean": "rimraf dist tsconfig.tsbuildinfo",
     "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
     "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx,json}",
@@ -19,7 +23,8 @@
   },
   "dependencies": {
     "@nozbe/watermelondb": "^0.24.0",
-    "lokijs": "^1.5.12"
+    "lokijs": "^1.5.12",
+    "@workspace/extension-common": "*"
   },
   "devDependencies": {},
   "peerDependencies": {}

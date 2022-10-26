@@ -1,4 +1,5 @@
 import getMessage from '@workspace/message-system';
+import { SyncPullArgs, SyncPushArgs } from '@nozbe/watermelondb/sync';
 import { ContentScriptComponent, InPageUIComponentShowState } from '../types';
 
 /** extension messages */
@@ -36,6 +37,15 @@ export const [
   msSharedStateSettingsStream,
   msWaitForSharedStateSettings,
 ] = getMessage<{ theme: 'dark' | 'light' }>('SHARED_STATE_SETTINGS');
+
+/**
+ * sync WatermelonDB
+ *  */
+export const [msSendPushArgs, msSendPushArgsStream, msWaitForSendPushArgs] =
+  getMessage<SyncPushArgs>('SYNC_PUSH');
+
+export const [msSendPullArgs, msSendPullArgsStream, msWaitForSendPullArgs] =
+  getMessage<SyncPullArgs>('SYNC_PULL');
 
 /**
  * development

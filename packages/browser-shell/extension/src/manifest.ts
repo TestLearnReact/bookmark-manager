@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import fs from 'fs-extra';
-import type PkgType from '../../package.json';
+import type PkgType from '../package.json';
 import type { ManifestV3Export } from '@crxjs/vite-plugin';
 import { res } from '../build-tools/shared';
 
@@ -10,7 +10,9 @@ import { res } from '../build-tools/shared';
  */
 
 export async function getManifest(): Promise<ManifestV3Export> {
-  const pkg = (await fs.readJSON(res('package.json'))) as typeof PkgType;
+  const pkg = (await fs.readJSON(
+    res('../extension/package.json'),
+  )) as typeof PkgType;
 
   // update this file to update this manifest.json
   // can also be conditional based on your need

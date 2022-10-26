@@ -24,7 +24,7 @@ export const manifest = defineManifest({
   content_scripts: [
     {
       js: ['src/contentScripts/cs-scripts/main.ts'],
-      matches: ['https://www.google.com/*'],
+      matches: ['*://*/*'],
       run_at: 'document_idle',
     },
   ],
@@ -33,14 +33,16 @@ export const manifest = defineManifest({
     type: 'module',
   },
   permissions: ['scripting', 'tabs', 'storage', 'activeTab', 'webNavigation'],
-  host_permissions: ['https://www.google.com/*'],
+  host_permissions: ['*://*/*'],
   web_accessible_resources: [
     defineDynamicResource({
-      matches: ['https://www.google.com/*'],
+      matches: ['<all_urls>'],
     }),
     {
       resources: ['public/*', 'dist/*', 'src/*'],
-      matches: ['<all_urls>'],
+      matches: ['*://*/*'],
     },
   ],
 });
+
+// ['https://www.google.com/*']

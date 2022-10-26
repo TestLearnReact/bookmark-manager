@@ -39,13 +39,15 @@ export const SvgTooltipComponent: React.FC<ISvgTooltipComponentProps> = ({
     <ButtonTooltip
       tooltipText={tooltipText}
       position={position}
-      className='ignore-react-onclickoutside'
+      className='_button-tooltip  ignore-react-onclickoutside'
     >
       <div onClick={onClick} className={wrapperClassName}>
         <Icon
           // fill={fill}
           className={
-            className ? `${className} buttonElemenet` : 'buttonElemenet'
+            className
+              ? `${className} buttonElemenet ignore-react-onclickoutside`
+              : 'buttonElemenet ignore-react-onclickoutside'
           }
           height={height}
           width={width}

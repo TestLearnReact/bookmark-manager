@@ -44,7 +44,10 @@ export const ButtonTooltip: React.FC<IButtonTooltipProps> = ({
   return (
     <S.Container ref={tooltipRef} position={position} className={className}>
       {state.displayTooltip && (
-        <S.TooltipBubble position={position}>
+        <S.TooltipBubble
+          position={position}
+          className='__TooltipBubble ignore-react-onclickoutside'
+        >
           <S.TooltipText>{tooltipText}</S.TooltipText>
         </S.TooltipBubble>
       )}

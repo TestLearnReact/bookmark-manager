@@ -52,7 +52,7 @@ const Toolbar: React.FC<IToolbarProps> = (props) => {
 
   return (
     <div
-      className={cx('toolbar', {
+      className={cx('toolbar', 'ignore-react-onclickoutside', {
         toolbarExpanded:
           sharedInPageUiState.toolbar || _DEV_OPTIONS.DEV_TOOLBAR_OPEN,
         toolbarSidebarOpen:

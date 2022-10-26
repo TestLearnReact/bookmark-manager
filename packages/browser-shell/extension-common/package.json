@@ -14,5 +14,8 @@
   },
   "dependencies": {
     "@workspace/message-system": "*"
+  },
+  "devDependencies": {
+    "@nozbe/watermelondb": "^0.24.0"
   }
 }

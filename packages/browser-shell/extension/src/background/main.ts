@@ -16,15 +16,15 @@ export const main = async ({
 }: {
   contentScriptsPaths: any;
 }) => {
-  msComponentInitStream.subscribe(
-    async ([{ component, scriptSender }, sender]) => {
-      console.log(component, scriptSender);
-      await msSendComponentInit(
-        { component, scriptSender },
-        { tabId: sender.tab?.id },
-      );
-    },
-  );
+  // msComponentInitStream.subscribe(
+  //   async ([{ component, scriptSender }, sender]) => {
+  //     console.log(component, scriptSender);
+  //     await msSendComponentInit(
+  //       { component, scriptSender },
+  //       { tabId: sender.tab?.id },
+  //     );
+  //   },
+  // );
 
   /**
    * Initial all Background Modules with shared Plugins

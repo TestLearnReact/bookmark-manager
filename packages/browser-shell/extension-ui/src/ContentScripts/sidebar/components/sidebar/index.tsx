@@ -16,7 +16,7 @@ import {
   msInPageUiStateStream,
 } from '@workspace/extension-common';
 import BookmarkList from '../BookmarkList';
-import { useDatabase } from '@workspace/watermelon';
+import { useDatabase } from '@workspace/watermelon-db';
 
 export const Sidebar: React.FC<{ inPageUI: SharedInPageUIState }> = ({
   inPageUI,

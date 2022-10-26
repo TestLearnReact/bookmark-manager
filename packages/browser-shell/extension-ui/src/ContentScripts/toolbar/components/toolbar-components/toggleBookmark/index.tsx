@@ -1,11 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { SvgTooltipComponent } from '@workspace/extension-ui/common';
 
 import IconFavorite from '~icons/public-assets-icons/favorite.svg';
 import IconfavoriteFilled from '~icons/public-assets-icons/favoriteFilled.svg';
-
-import { compose } from 'recompose';
 
 import {
   BookmarkModel,
@@ -15,7 +13,8 @@ import {
   Q,
   deleteBookmarkByUrl,
   createBookmark,
-} from '@workspace/watermelon';
+  mySync,
+} from '@workspace/watermelon-db';
 import withObservables from '@nozbe/with-observables';
 
 const getObservables = ({
@@ -49,8 +48,7 @@ const ToggleBookmark: React.FC<IToggleBookmark> = ({
   const isBookmarked = Array.isArray(bookmark) && bookmark.length > 0;
 
   const toggle = async () => {
-    const isBookmarked = Array.isArray(bookmark) && bookmark.length > 0;
-
+    console.log(isBookmarked, bookmark);
     if (!isBookmarked) {
       createBookmark({
         database,
@@ -64,13 +62,14 @@ const ToggleBookmark: React.FC<IToggleBookmark> = ({
     if (isBookmarked) {
       deleteBookmarkByUrl({ database, url: pageData.url() });
     }
+    await mySync({ database });
   };
 
   return (
     <SvgTooltipComponent
       iconProps={{
         icon: isBookmarked ? IconfavoriteFilled : IconFavorite,
-        className: 'ignore-react-onclickoutside',
+        className: '_ToggleBookmark ignore-react-onclickoutside',
       }}
       tooltipProps={{
         tooltipText: getTooltipText('Toggle bookmark'),
@@ -81,4 +80,4 @@ const ToggleBookmark: React.FC<IToggleBookmark> = ({
   );
 };
 
-export default withObservables(['database'], getObservables)(ToggleBookmark);
+export default withObservables([], getObservables)(ToggleBookmark);

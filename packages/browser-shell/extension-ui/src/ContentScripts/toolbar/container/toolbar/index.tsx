@@ -17,7 +17,7 @@ import {
   Q,
   TableName,
   useDatabase,
-} from '@workspace/watermelon';
+} from '@workspace/watermelon-db';
 
 interface IToolbarContainer {
   dependencies: ToolbarContainerDependencies;

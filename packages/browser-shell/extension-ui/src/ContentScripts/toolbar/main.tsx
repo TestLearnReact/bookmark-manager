@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { StyleSheetManager } from 'styled-components';
 import ToolbarHolderContainer from './container/toolbar-holder';
-import { Database, DatabaseProvider } from '@workspace/watermelon';
+import { Database, DatabaseProvider } from '@workspace/watermelon-db';
 import {
   SharedInPageUIState,
   InPageUIRootMount,

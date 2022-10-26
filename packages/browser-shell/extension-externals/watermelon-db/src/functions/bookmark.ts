@@ -32,9 +32,6 @@ export const createBookmark = async ({
     const bookmark = await database.collections
       .get<BookmarkModel>(TableName.BOOKMARKS)
       .create((b) => {
-        // url;
-        // normalizedUrl;
-        // title;
         b.url = url;
         b.normalizedUrl = normalizedUrl;
         b.title = title;
@@ -64,11 +61,21 @@ export const deleteBookmarkByUrl = async ({
   return;
 };
 
-// await database.write(async (writer) => {
-//   const del = await database.collections
-//     .get<BookmarkModel>(TableName.BOOKMARKS)
-//     .query(Q.where('url', window.location.href))
-//     .markAllAsDeleted();
+export const deleteBookmarkById = async ({
+  database,
+  id,
+}: {
+  database: Database;
+  id: string;
+}) => {
+  const bookmark = await database.collections
+    .get<BookmarkModel>(TableName.BOOKMARKS)
+    .find(id);
 
-//   return del;
-// });
+  await database.write(async (writer) => {
+    const delBookmark = bookmark.markAsDeleted();
+    return delBookmark;
+  });
+
+  return;
+};

@@ -4,12 +4,15 @@ import {
   messageBridgeCsBgCs,
   TabManagementBackground,
   TabManager,
+  WatermelonDbBackground,
 } from '@workspace/extension-base';
 import { Browser } from 'webextension-polyfill';
 
+import { genWatermelonDb } from '@workspace/watermelon-db';
+
 export interface IBackgroundModules {
   tabManagementBackground: TabManagementBackground;
-  // pageIndexingBackground: PageIndexingBackground;
+  watermelonDbBackround: WatermelonDbBackground;
   mainModuleBackground: MainModuleBackground;
   contentScriptBackground: ContentScriptsBackground;
 }
@@ -38,6 +41,11 @@ export async function createBackgroundModules(options: {
     tabManagementBackground,
   });
 
+  const database = await genWatermelonDb({
+    dbName: MainModuleBackground.dbName,
+  });
+  console.log('database?? ', database);
+
   /** */
   const contentScriptBackground = new ContentScriptsBackground({
     webNavigation: options.browserAPIs.webNavigation,
@@ -46,10 +54,15 @@ export async function createBackgroundModules(options: {
     contentScriptsPaths: options.contentScriptsPaths,
   });
 
+  const watermelonDbBackround = new WatermelonDbBackground({
+    database,
+  });
+
   return {
     tabManagementBackground,
     mainModuleBackground,
     contentScriptBackground,
+    watermelonDbBackround,
   };
 }
 

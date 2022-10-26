@@ -10,9 +10,6 @@ import { manifest } from './manifest.vite';
 import { isDev, OUTDIR_VITE_NAME, resRoot, resSrc } from '../shared';
 import { aliasVite, getAlias } from '../shared/sharedConfig';
 
-import babel from 'vite-plugin-babel';
-import legacy from '@vitejs/plugin-legacy';
-
 export default defineConfig({
   resolve: {
     alias: getAlias(aliasVite),
@@ -25,9 +22,6 @@ export default defineConfig({
   },
 
   plugins: [
-    // legacy({
-    //   targets: ['defaults', 'not IE 11'],
-    // }),
     Icons({
       compiler: 'jsx',
       jsx: 'react',
@@ -55,13 +49,7 @@ export default defineConfig({
         ),
       },
     }),
-    react({
-      babel: {
-        parserOpts: {
-          plugins: [['decorators-legacy', { legacy: true }]],
-        },
-      },
-    }),
+    react(),
     crx({ manifest }),
     AutoImport({
       imports: [
