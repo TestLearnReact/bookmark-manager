@@ -25,6 +25,7 @@
         "camelcase": "error",
         "spaced-comment": "error",
         "quotes": ["error", "single"],
+        "prefer-const":"off",
         "no-duplicate-imports": "error",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "off",

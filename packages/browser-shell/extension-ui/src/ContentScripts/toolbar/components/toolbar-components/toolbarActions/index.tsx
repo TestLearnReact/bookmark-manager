@@ -13,7 +13,7 @@ import {
 
 import { IToolbarBookmarkProps, IToolbarSidebarProps } from '../../toolbar';
 
-import { useDatabase } from '@workspace/watermelon-db';
+import { useDatabase } from '@workspace/extension-base';
 import ToggleBookmark from '../toggleBookmark';
 
 export interface IToolbarActionsProps {

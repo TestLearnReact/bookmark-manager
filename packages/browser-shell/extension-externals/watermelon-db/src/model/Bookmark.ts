@@ -1,5 +1,11 @@
 import { Model, Q } from '@nozbe/watermelondb';
-import { field, text, writer } from '@nozbe/watermelondb/decorators';
+import {
+  date,
+  field,
+  readonly,
+  text,
+  writer,
+} from '@nozbe/watermelondb/decorators';
 import { TableName } from '../types';
 
 export interface IBookmarkCollection {
@@ -14,6 +20,8 @@ export class BookmarkModel extends Model {
   @field('url') url!: string;
   @field('normalized_url') normalizedUrl!: string;
   @text('title') title!: string;
+  @readonly @date('created_at') createdAt;
+  @readonly @date('updated_at') updatedAt;
 
   @writer async createBookmark({
     url,

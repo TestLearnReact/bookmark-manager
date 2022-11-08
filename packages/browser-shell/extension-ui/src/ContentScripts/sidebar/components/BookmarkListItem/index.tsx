@@ -1,5 +1,9 @@
-import withObservables, { ExtractedObservables } from '@nozbe/with-observables';
-import { BookmarkModel } from '@workspace/watermelon-db';
+// import withObservables, { ExtractedObservables } from '@nozbe/with-observables';
+import {
+  BookmarkModel,
+  ExtractedObservables,
+  withObservables,
+} from '@workspace/extension-base';
 import React from 'react';
 
 interface IBookmarkListItemProps

@@ -1,16 +1,24 @@
-import {
-  SyncPushArgs,
-  SyncPullArgs,
-  synchronize,
-  SyncDatabaseChangeSet,
-} from '@nozbe/watermelondb/sync';
-import { Database } from '@nozbe/watermelondb';
+// import {
+//   SyncPushArgs,
+//   SyncPullArgs,
+//   synchronize,
+//   SyncDatabaseChangeSet,
+// } from '@nozbe/watermelondb/sync';
 import {
   msSendPullArgs,
   msSendPushArgs,
   msSendPushArgsStream,
 } from '@workspace/extension-common';
 import Browser, { Runtime } from 'webextension-polyfill';
+import { TableName, TabModel } from '../database';
+
+import {
+  Database,
+  synchronize,
+  SyncPushArgs,
+  SyncDatabaseChangeSet,
+  Q,
+} from '@workspace/watermelon-db';
 
 export class WatermelonDbBackground {
   private runtimeAPI: Runtime.Static;
@@ -28,14 +36,34 @@ export class WatermelonDbBackground {
 
     msSendPushArgsStream.subscribe(
       async ([{ changes, lastPulledAt }, sender]) => {
+        console.log('sync sync sync ');
         const res = await this.handleSync({ push: { changes, lastPulledAt } });
-        await msSendPushArgs(
-          {
-            changes: res.changes,
-            lastPulledAt: res.timestamp,
-          },
-          { tabId: sender.tab?.id },
-        );
+
+        const ii = sender.tab?.id;
+        if (ii) {
+          const atab = await database.collections
+            .get<TabModel>(TableName.TABS)
+            .query(
+              Q.and(
+                Q.where('api_tab_id', Q.notEq(ii)),
+                Q.where('is_open', Q.eq(true)),
+              ),
+            )
+            .fetch();
+          console.log('......', ii, atab);
+
+          atab.map((tab) => {
+            // send changes to other Tabs -> insert via pullChanges
+            console.log('ä', tab.id, tab);
+            msSendPushArgs(
+              {
+                changes: res.changes,
+                lastPulledAt: res.timestamp,
+              },
+              { tabId: Number(tab.apiTabId) },
+            );
+          });
+        }
       },
     );
   }
@@ -69,7 +97,7 @@ export class WatermelonDbBackground {
     const cleandedChanges = this.excludeFields({ changes: push.changes });
 
     /**
-     *
+     * get data from frontend
      */
     await synchronize({
       database: this.database,
@@ -85,7 +113,7 @@ export class WatermelonDbBackground {
     });
 
     /**
-     *  sync Watermelondb with other
+     *  return changes to sync Watermelondb with other Tabs
      */
 
     return { changes: cleandedChanges, timestamp: push.lastPulledAt };

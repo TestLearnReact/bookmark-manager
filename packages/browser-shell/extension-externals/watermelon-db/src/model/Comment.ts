@@ -1,7 +1,9 @@
 import { Model } from '@nozbe/watermelondb';
 import {
+  date,
   field,
   immutableRelation,
+  readonly,
   relation,
   writer,
 } from '@nozbe/watermelondb/decorators';
@@ -18,6 +20,8 @@ export class CommentModel extends Model {
 
   // To point to a related record, e.g. Post a Comment belongs to, or author (User) of a Comment, use @relation or @immutableRelation:
   @relation('posts', 'post_id') post;
+  @readonly @date('created_at') createdAt;
+  @readonly @date('updated_at') updatedAt;
   // @immutableRelation('users', 'author_id') author
 
   @field('is_spam') isSpam;

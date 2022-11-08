@@ -1,14 +1,13 @@
 import {
   ContentScriptsBackground,
+  genWatermelonDb,
   MainModuleBackground,
   messageBridgeCsBgCs,
   TabManagementBackground,
   TabManager,
   WatermelonDbBackground,
 } from '@workspace/extension-base';
-import { Browser } from 'webextension-polyfill';
-
-import { genWatermelonDb } from '@workspace/watermelon-db';
+import { Browser, type Tabs } from 'webextension-polyfill';
 
 export interface IBackgroundModules {
   tabManagementBackground: TabManagementBackground;
@@ -28,23 +27,31 @@ export async function createBackgroundModules(options: {
 
   const getNow = () => Date.now();
 
+  const database = await genWatermelonDb({
+    dbName: 'MainModuleBackground.dbName',
+  });
+
+  try {
+    await database.write(async () => await database.unsafeResetDatabase());
+  } catch (error) {
+    console.log('errr');
+  }
+
+  console.log('database?? ', database);
+
   /** */
   const tabManager = new TabManager();
   const tabManagementBackground = new TabManagementBackground({
     tabManager,
     browserAPIs: options.browserAPIs,
     contentScriptsPaths: options.contentScriptsPaths,
+    database,
   });
 
   /** */
   const mainModuleBackground = new MainModuleBackground({
     tabManagementBackground,
   });
-
-  const database = await genWatermelonDb({
-    dbName: MainModuleBackground.dbName,
-  });
-  console.log('database?? ', database);
 
   /** */
   const contentScriptBackground = new ContentScriptsBackground({

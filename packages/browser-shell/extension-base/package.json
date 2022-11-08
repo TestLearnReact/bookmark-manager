@@ -5,6 +5,8 @@
   "description": "shared functions, utils etc.",
   "sideEffects": true,
   "private": "true",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "scripts": {
     "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
     "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx,json}",

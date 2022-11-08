@@ -11,13 +11,10 @@ import { darkTheme, lightTheme, ThemeProvider } from '../../../../common';
 
 import Toolbar from '../../components/toolbar';
 import {
-  BookmarkModel,
   createBookmark,
   isBookmarked,
-  Q,
-  TableName,
   useDatabase,
-} from '@workspace/watermelon-db';
+} from '@workspace/extension-base';
 
 interface IToolbarContainer {
   dependencies: ToolbarContainerDependencies;

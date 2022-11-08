@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Database, DatabaseProvider } from '@workspace/watermelon-db';
+import { Database, DatabaseProvider } from '@workspace/extension-base';
 import { StyleSheetManager } from 'styled-components';
 import {
   InPageUIRootMount,

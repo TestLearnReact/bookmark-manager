@@ -26,10 +26,10 @@ export class MainModuleBackground {
 
   private async handleInstallLogic(now = Date.now()) {
     console.log('- Install Logic -', now);
-    const database = await genWatermelonDb({
-      dbName: MainModuleBackground.dbName,
-    });
-    MainModuleBackground.database = database;
+    // const database = await genWatermelonDb({
+    //   dbName: MainModuleBackground.dbName,
+    // });
+    // MainModuleBackground.database = database;
     // await database.write(async () => {
     //   await database.unsafeResetDatabase();
     // });
@@ -67,7 +67,9 @@ export class MainModuleBackground {
 
   // browser restarted
   private setupStartupHooks() {
+    console.log('setupStartupHooks');
     this.runtimeAPI.onStartup.addListener(async () => {
+      console.log('setupStartupHooks 22');
       await this.tabManagementBackground.trackExistingTabs();
     });
   }

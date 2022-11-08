@@ -8,6 +8,5 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
   },
-  "references": [{ "path": "../../extension-common" }],
   "include": ["./src/**/*"]
 }

@@ -1,6 +1,7 @@
 import getMessage from '@workspace/message-system';
 import { SyncPullArgs, SyncPushArgs } from '@nozbe/watermelondb/sync';
 import { ContentScriptComponent, InPageUIComponentShowState } from '../types';
+import browser from 'webextension-polyfill';
 
 /** extension messages */
 export const [msSendInjectScript, msInjectScriptStream, msWaitForInjectScript] =
@@ -38,6 +39,23 @@ export const [
   msWaitForSharedStateSettings,
 ] = getMessage<{ theme: 'dark' | 'light' }>('SHARED_STATE_SETTINGS');
 
+export const [
+  msSendBackgroundEmittedData,
+  msBackgroundEmittedDataStream,
+  msWaitForBackgroundEmittedData,
+] = getMessage<{
+  onUpdated: {
+    tabId: number;
+    changeInfo: browser.Tabs.OnUpdatedChangeInfoType;
+    tabinfo: browser.Tabs.Tab;
+  };
+}>('INDEX');
+
+export const [
+  msSendSetTabAsIndexed,
+  msSetTabAsIndexedStream,
+  msWaitForSetTabAsIndexed,
+] = getMessage<void>('TAB_INDEXED');
 /**
  * sync WatermelonDB
  *  */

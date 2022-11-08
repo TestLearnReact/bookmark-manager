@@ -4,6 +4,7 @@ import {
   date,
   field,
   lazy,
+  readonly,
   text,
 } from '@nozbe/watermelondb/decorators';
 import { Associations } from '@nozbe/watermelondb/Model';
@@ -25,6 +26,8 @@ export class PostModel extends Model {
   // For date fields, use @date instead of @field. This will return a JavaScript Date object (instead of Unix timestamp integer).
   @date('last_event_at') lastEventAt;
   @date('archived_at') archivedAt;
+  @readonly @date('created_at') createdAt;
+  @readonly @date('updated_at') updatedAt;
 
   // Use ES6 getters to define model properties that can be calculated based on database fields:
   get isRecentlyArchived() {

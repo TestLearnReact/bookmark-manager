@@ -25,7 +25,7 @@ export const manifest = defineManifest({
     {
       js: ['src/contentScripts/cs-scripts/main.ts'],
       matches: ['*://*/*'],
-      run_at: 'document_idle',
+      run_at: 'document_start',
     },
   ],
   background: {

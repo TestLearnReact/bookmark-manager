@@ -5,17 +5,29 @@ import { SvgTooltipComponent } from '@workspace/extension-ui/common';
 import IconFavorite from '~icons/public-assets-icons/favorite.svg';
 import IconfavoriteFilled from '~icons/public-assets-icons/favoriteFilled.svg';
 
+// import {
+//   BookmarkModel,
+//   Database,
+//   ExtractedObservables,
+//   TableName,
+//   Q,
+//   deleteBookmarkByUrl,
+//   createBookmark,
+//   mySync,
+// } from '@workspace/watermelon-db';
+
+// import withObservables from '@nozbe/with-observables';
 import {
-  BookmarkModel,
   Database,
-  ExtractedObservables,
-  TableName,
   Q,
-  deleteBookmarkByUrl,
+  BookmarkModel,
+  TableName,
+  withObservables,
+  ExtractedObservables,
   createBookmark,
-  mySync,
-} from '@workspace/watermelon-db';
-import withObservables from '@nozbe/with-observables';
+  deleteBookmarkByUrl,
+  syncWatermelonDbFrontends,
+} from '@workspace/extension-base';
 
 const getObservables = ({
   database,
@@ -62,7 +74,7 @@ const ToggleBookmark: React.FC<IToggleBookmark> = ({
     if (isBookmarked) {
       deleteBookmarkByUrl({ database, url: pageData.url() });
     }
-    await mySync({ database });
+    await syncWatermelonDbFrontends({ database });
   };
 
   return (

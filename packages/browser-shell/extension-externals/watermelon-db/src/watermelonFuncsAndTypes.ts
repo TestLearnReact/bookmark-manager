@@ -3,13 +3,29 @@ import withObservables, {
   ObservableifyProps,
 } from '@nozbe/with-observables';
 
-import { type Database, Q, type Query } from '@nozbe/watermelondb';
+import { Database, Q, Query } from '@nozbe/watermelondb';
 
 import DatabaseProvider, {
   withDatabase,
 } from '@nozbe/watermelondb/DatabaseProvider';
 
 import { useDatabase } from '@nozbe/watermelondb/hooks';
+
+import {
+  synchronize,
+  type SyncPullArgs,
+  type SyncPushArgs,
+  type SyncPullResult,
+  type SyncDatabaseChangeSet,
+} from '@nozbe/watermelondb/sync';
+
+export {
+  synchronize,
+  SyncPullArgs,
+  SyncPushArgs,
+  SyncPullResult,
+  SyncDatabaseChangeSet,
+};
 
 export {
   Query,

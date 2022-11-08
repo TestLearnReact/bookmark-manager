@@ -4,8 +4,9 @@ import {
   Database,
   TableName,
   ExtractedObservables,
-} from '@workspace/watermelon-db';
-import withObservables from '@nozbe/with-observables';
+  withObservables,
+} from '@workspace/extension-base';
+// import withObservables from '@nozbe/with-observables';
 import BookmarkListItem from '../BookmarkListItem';
 
 interface IBookmarkListProps

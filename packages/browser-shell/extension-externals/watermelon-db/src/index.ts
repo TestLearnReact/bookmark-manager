@@ -4,4 +4,4 @@ export * from './watermelonFuncsAndTypes';
 export * from './main';
 export * from './types';
 export * from './functions';
-export * from './sync';
+// export * from './sync';

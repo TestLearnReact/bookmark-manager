@@ -8,18 +8,26 @@ export class TabManager {
   static DEF_LOG_DELAY = 2;
 
   _tabs = new Map<number, Tab>();
+  _tabsToSync = new Map<
+    number,
+    { id: number; isOpen: boolean; isActive: boolean }
+  >(); ////
 
   get size() {
     return this._tabs.size;
+  }
+
+  getTabs() {
+    return this._tabs;
   }
 
   /**
    * @param {tabs.Tab} tab The browser tab to start keeping track of.
    */
   trackTab = (
-    { id = -1, active, url, windowId }: Tabs.Tab, //// todo -1
+    { id = -1, active, url, windowId }: Tabs.Tab, // // todo -1
     extraProps: Partial<TabState> = {},
-  ) =>
+  ) => {
     this._tabs.set(
       id,
       new Tab({
@@ -30,7 +38,7 @@ export class TabManager {
         ...extraProps,
       }),
     );
-
+  };
   /**
    * @param {number} id The ID of the tab as assigned by web ext API.
    * @returns {Tab|undefined} The state for tab stored under given ID, or undefined if no matching tab.
@@ -60,6 +68,7 @@ export class TabManager {
   }
 
   isTracked(id: number) {
+    // console.log('--> isTracked ', id, this.getTabState(id));
     return this._tabs.has(id);
   }
 
@@ -125,6 +134,7 @@ export class TabManager {
     const tab = this.getTabState(id);
 
     if (tab != null) {
+      console.log('setTabLoaded', tab);
       tab.setLoadedState(isLoaded);
     }
   }

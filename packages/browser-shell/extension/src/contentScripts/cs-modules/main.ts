@@ -1,8 +1,14 @@
-import { genWatermelonDb, mySync } from '@workspace/watermelon-db';
 import {
+  syncWatermelonDbFrontends,
+  genWatermelonDb,
+  createTabPos,
+} from '@workspace/extension-base';
+import {
+  msBackgroundEmittedDataStream,
   msSendComponentInit,
   msSendInjectScript,
   msSendPushArgsStream,
+  msSendSetTabAsIndexed,
   Resolvable,
   resolvablePromise,
 } from '@workspace/extension-common';
@@ -11,6 +17,7 @@ import {
   SidebarContainerDependencies,
   ToolbarContainerDependencies,
 } from '@workspace/extension-ui';
+import browser from 'webextension-polyfill';
 
 import {
   ContentScriptComponent,
@@ -46,16 +53,35 @@ const csMainModule = async (
     dbName: 'SharedFrontendWatermelonDb2',
   });
 
-  try {
-    watermelonDb.write(async () => await watermelonDb.unsafeResetDatabase());
-  } catch (error) {
-    console.log('errr');
-  }
+  // try {
+  //   await watermelonDb.write(
+  //     async () => await watermelonDb.unsafeResetDatabase(),
+  //   );
+  // } catch (error) {
+  //   console.log('errr');
+  // }
+
+  await msSendSetTabAsIndexed();
+
+  msBackgroundEmittedDataStream.subscribe(async ([{ onUpdated }, sender]) => {
+    const { tabId, tabinfo } = onUpdated;
+
+    const create = await createTabPos({
+      database: watermelonDb,
+      fields: {
+        apiTabId: tabinfo.id?.toString() || '-1',
+        url: tabinfo.url!,
+        title: tabinfo.title!,
+      },
+    });
+
+    console.log('onUpdated ?????: ', onUpdated, create);
+  });
 
   msSendPushArgsStream.subscribe(
     async ([{ changes, lastPulledAt }, sender]) => {
       console.log('sync ?????: ', changes, lastPulledAt);
-      await mySync({
+      await syncWatermelonDbFrontends({
         database: watermelonDb,
         pullBridgeFromBackground: { changes, lastPulledAt },
       });
@@ -66,9 +92,8 @@ const csMainModule = async (
   // business logic of initialising and hide/showing components.
 
   const inPageUI = new SharedInPageUIState({
-    loadComponent: (component) => {
+    loadComponent: (component: ContentScriptComponent) => {
       if (!components[component]) {
-        console.log(!components[component], component);
         components[component] = resolvablePromise<void>();
         loadContentScript(component);
       }
@@ -78,22 +103,6 @@ const csMainModule = async (
       delete components[component];
     },
   });
-
-  // const inPageUI = {
-  //   loadComponent: (component: any) => {
-  //     // ContentScriptComponent
-
-  //     if (!components[component]) {
-  //       components[component] = resolvablePromise<void>();
-  //       loadContentScript(component);
-  //     }
-
-  //     return components[component]!;
-  //   },
-  //   unloadComponent: (component) => {
-  //     delete components[component];
-  //   },
-  // };
 
   // 4. Create a contentScriptRegistry object with functions for each content script
   // component, that when run, initialise the respective component with it's

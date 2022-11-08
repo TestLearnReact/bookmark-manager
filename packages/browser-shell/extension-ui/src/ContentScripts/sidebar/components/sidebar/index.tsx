@@ -16,7 +16,8 @@ import {
   msInPageUiStateStream,
 } from '@workspace/extension-common';
 import BookmarkList from '../BookmarkList';
-import { useDatabase } from '@workspace/watermelon-db';
+import { useDatabase } from '@workspace/extension-base';
+import HistoryList from '../HistoryList';
 
 export const Sidebar: React.FC<{ inPageUI: SharedInPageUIState }> = ({
   inPageUI,
@@ -48,7 +49,8 @@ export const Sidebar: React.FC<{ inPageUI: SharedInPageUIState }> = ({
         />
       </SidbarTopBar> */}
       {/* <S.Content>.. Content ..</S.Content> */}
-      <BookmarkList database={database} />
+      {/* <BookmarkList database={database} /> */}
+      <HistoryList database={database} />
 
       <CssModuleTestButton>.</CssModuleTestButton>
     </S.Container>
