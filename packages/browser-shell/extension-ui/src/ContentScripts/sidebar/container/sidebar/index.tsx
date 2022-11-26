@@ -24,7 +24,7 @@ interface SidebarHolderProps {
 }
 
 const SidebarContainer: React.FC<SidebarHolderProps> = ({ dependencies }) => {
-  console.log('r.e.r.e.n.d.e.r SidebarContainer');
+  // console.log('r.e.r.e.n.d.e.r SidebarContainer');
 
   const { inPageUI } = dependencies;
 
@@ -51,7 +51,7 @@ const SidebarContainer: React.FC<SidebarHolderProps> = ({ dependencies }) => {
 
   useEffect(() => {
     msInPageUiStateStream.subscribe(([{ toolbar, sidebar }]) => {
-      console.log('sidebar msInPageUiStateStream', sharedInPageUiState);
+      // console.log('sidebar msInPageUiStateStream', sharedInPageUiState);
       setSharedInPageUiState({ toolbar, sidebar });
     });
   }, []);
@@ -75,6 +75,8 @@ const SidebarContainer: React.FC<SidebarHolderProps> = ({ dependencies }) => {
   } as const;
 
   const refSidebar = useRef();
+
+  console.log('THEME', themeType, theme);
 
   if (!sharedInPageUiState.sidebar && !_DEV_OPTIONS.DEV_SDEBAR_OPEN)
     return null;

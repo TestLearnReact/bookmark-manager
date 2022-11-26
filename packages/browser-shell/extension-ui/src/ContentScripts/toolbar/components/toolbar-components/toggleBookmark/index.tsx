@@ -27,6 +27,7 @@ import {
   createBookmark,
   deleteBookmarkByUrl,
   syncWatermelonDbFrontends,
+  deleteBookmarkById,
 } from '@workspace/extension-base';
 
 const getObservables = ({
@@ -62,7 +63,7 @@ const ToggleBookmark: React.FC<IToggleBookmark> = ({
   const toggle = async () => {
     console.log(isBookmarked, bookmark);
     if (!isBookmarked) {
-      createBookmark({
+      await createBookmark({
         database,
         fields: {
           url: pageData.url(),
@@ -72,7 +73,7 @@ const ToggleBookmark: React.FC<IToggleBookmark> = ({
       });
     }
     if (isBookmarked) {
-      deleteBookmarkByUrl({ database, url: pageData.url() });
+      await deleteBookmarkById({ database, id: bookmark[0].id });
     }
     await syncWatermelonDbFrontends({ database });
   };

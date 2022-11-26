@@ -1,5 +1,8 @@
 import { _DEV_OPTIONS } from '@workspace/extension-ui';
-import { msSendExtensionReload } from '@workspace/extension-common';
+import {
+  msSendExtensionReload,
+  msSendSetTabAsIndexed,
+} from '@workspace/extension-common';
 import { csMainModule } from '../cs-modules/main';
 
 // /**
@@ -9,7 +12,11 @@ import { csMainModule } from '../cs-modules/main';
 export const main = async () => await csMainModule();
 
 (async () => {
-  await main();
+  await main().then(async () => {
+    await msSendSetTabAsIndexed()
+      .then(() => console.log('tab indexed'))
+      .catch(() => console.log('not tab indexed'));
+  });
 
   /**
    * development
@@ -23,7 +30,7 @@ export const main = async () => await csMainModule();
 
     port.onMessage.addListener((m) => {
       const payload = JSON.parse(m.data);
-      console.log('pay', payload);
+
       if (isCrxHMRPayload(payload)) {
         if (payload.event === 'crx:runtime-reload') {
           // reload Tab always work

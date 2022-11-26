@@ -7,7 +7,7 @@
   "references": [
     { "path": "../extension-ui" },
     { "path": "../extension-common" },
-    { "path": "../extension-base" },
+    { "path": "../extension-base" }
   ],
   "include": ["src", "build-tools/**/*.ts", "package.json"]
 }

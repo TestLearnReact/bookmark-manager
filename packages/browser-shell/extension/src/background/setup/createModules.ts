@@ -1,5 +1,6 @@
 import {
   ContentScriptsBackground,
+  DbManagement,
   genWatermelonDb,
   MainModuleBackground,
   messageBridgeCsBgCs,
@@ -12,6 +13,7 @@ import { Browser, type Tabs } from 'webextension-polyfill';
 export interface IBackgroundModules {
   tabManagementBackground: TabManagementBackground;
   watermelonDbBackround: WatermelonDbBackground;
+  dbManagement: DbManagement;
   mainModuleBackground: MainModuleBackground;
   contentScriptBackground: ContentScriptsBackground;
 }
@@ -23,12 +25,13 @@ export async function createBackgroundModules(options: {
   browserAPIs: Browser;
   contentScriptsPaths: any;
 }): Promise<IBackgroundModules> {
+  /** */
   await messageBridgeCsBgCs();
 
   const getNow = () => Date.now();
 
   const database = await genWatermelonDb({
-    dbName: 'MainModuleBackground.dbName',
+    dbName: 'WaterBg',
   });
 
   try {
@@ -37,7 +40,7 @@ export async function createBackgroundModules(options: {
     console.log('errr');
   }
 
-  console.log('database?? ', database);
+  const dbManagement = new DbManagement({ database });
 
   /** */
   const tabManager = new TabManager();
@@ -46,6 +49,7 @@ export async function createBackgroundModules(options: {
     browserAPIs: options.browserAPIs,
     contentScriptsPaths: options.contentScriptsPaths,
     database,
+    dbManagement,
   });
 
   /** */
@@ -55,6 +59,7 @@ export async function createBackgroundModules(options: {
 
   /** */
   const contentScriptBackground = new ContentScriptsBackground({
+    database,
     webNavigation: options.browserAPIs.webNavigation,
     getURL: bindMethod(options.browserAPIs.runtime, 'getURL'),
     getTab: bindMethod(options.browserAPIs.tabs, 'get'),
@@ -63,6 +68,7 @@ export async function createBackgroundModules(options: {
 
   const watermelonDbBackround = new WatermelonDbBackground({
     database,
+    tabManagementBackground,
   });
 
   return {
@@ -70,6 +76,7 @@ export async function createBackgroundModules(options: {
     mainModuleBackground,
     contentScriptBackground,
     watermelonDbBackround,
+    dbManagement,
   };
 }
 

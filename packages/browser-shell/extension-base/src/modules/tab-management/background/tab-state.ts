@@ -25,9 +25,9 @@ class Tab implements TabState {
     navState = {},
   }: Partial<TabState>) {
     this.id = id;
-    //@ts-ignore
+    // @ts-ignore
     this.url = url; // todo
-    //@ts-ignore
+    // @ts-ignore
     this.windowId = windowId; // todo
     this.isActive = isActive;
     this.isLoaded = isLoaded;

@@ -17,7 +17,7 @@ interface IToolbarHolderProps {
 const ToolbarHolderContainer: React.FC<IToolbarHolderProps> = ({
   dependencies,
 }) => {
-  console.log('.r.e.n.d.e.r ToolbarHolderContainer');
+  // console.log('.r.e.n.d.e.r ToolbarHolderContainer');
 
   const holderRef = useRef<HTMLDivElement>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
@@ -44,19 +44,16 @@ const ToolbarHolderContainer: React.FC<IToolbarHolderProps> = ({
   }, []);
 
   const handleMouseEnterHolderRef = (event: Event) => {
-    // console.log("handleMouseEnter HolderRef");
     mouseInHolder = true;
     inPageUI.showToolbar();
   };
 
   const handleMouseEnterToolbarRef = (event: Event) => {
-    // console.log("handleMouseEnter ToolbarRef");
     mouseInToolbar = true;
     inPageUI.showToolbar();
   };
 
   const handleMouseLeaveToolbarRef = (event: Event) => {
-    // console.log("handleMouseLeaveToolbarRef");
     mouseInToolbar = false;
   };
 

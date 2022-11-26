@@ -2,9 +2,10 @@
 
 // @import url('/fonts/Inter/inter.css');
 
-// :host * {
-//     font-family: 'Inter', sans-serif;
-// }
+:host * {
+    font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
+}
 
 .extraPanel {
     all: initial;
@@ -36,7 +37,7 @@
     background: transparent;
     z-index: 2147483647;
 
-    
+    box-sizing: initial ;// todo body {} font size etc. stles die sich nicht änder in container auslagern
     //padding-right: 5px;
 }
 

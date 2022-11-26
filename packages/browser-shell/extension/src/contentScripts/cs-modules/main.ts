@@ -5,10 +5,13 @@ import {
 } from '@workspace/extension-base';
 import {
   msBackgroundEmittedDataStream,
+  msChangesFromBgStream,
   msSendComponentInit,
   msSendInjectScript,
+  msSendPullArgsStream,
   msSendPushArgsStream,
   msSendSetTabAsIndexed,
+  msSendTestStream,
   Resolvable,
   resolvablePromise,
 } from '@workspace/extension-common';
@@ -38,7 +41,7 @@ const csMainModule = async (
     };
   } = { loadRemotely: true },
 ) => {
-  console.log('cs-modules/main.ts...');
+  console.log('... cs-modules/main.ts ...');
 
   // 1. Create a local object with promises to track each content script
   // initialisation and provide a function which can initialise a content script
@@ -53,34 +56,34 @@ const csMainModule = async (
     dbName: 'SharedFrontendWatermelonDb2',
   });
 
-  // try {
-  //   await watermelonDb.write(
-  //     async () => await watermelonDb.unsafeResetDatabase(),
-  //   );
-  // } catch (error) {
-  //   console.log('errr');
-  // }
+  try {
+    // reset db for pulling all from background
+    await watermelonDb.write(
+      async () => await watermelonDb.unsafeResetDatabase(),
+    );
+  } catch (error) {
+    console.log('errr');
+  }
 
-  await msSendSetTabAsIndexed();
+  // window.addEventListener('beforeunload', async function (e) {
+  //   try {
+  //     // reset db for pulling all from background
+  //     await watermelonDb.write(
+  //       async () => await watermelonDb.unsafeResetDatabase(),
+  //     );
+  //   } catch (error) {
+  //     console.log('errr');
+  //   }
+  // });
 
-  msBackgroundEmittedDataStream.subscribe(async ([{ onUpdated }, sender]) => {
-    const { tabId, tabinfo } = onUpdated;
-
-    const create = await createTabPos({
-      database: watermelonDb,
-      fields: {
-        apiTabId: tabinfo.id?.toString() || '-1',
-        url: tabinfo.url!,
-        title: tabinfo.title!,
-      },
-    });
-
-    console.log('onUpdated ?????: ', onUpdated, create);
+  // retrieve data from bg when called msSendSetTabAsIndexed() in the bootom
+  msSendPullArgsStream.subscribe(([{ lastPulledAt }, sender]) => {
+    console.log('# msSendPullArgsStream', sender.tab);
   });
 
   msSendPushArgsStream.subscribe(
     async ([{ changes, lastPulledAt }, sender]) => {
-      console.log('sync ?????: ', changes, lastPulledAt);
+      console.log('#### sync ####: ', changes, lastPulledAt);
       await syncWatermelonDbFrontends({
         database: watermelonDb,
         pullBridgeFromBackground: { changes, lastPulledAt },
@@ -167,6 +170,10 @@ const csMainModule = async (
 
   // msSendComponentInit({ component: "toolbar" });
   // msSendComponentInit({ component: "sidebar" });
+  // debugger;
+  // ///await msSendSetTabAsIndexed();
+  // .then((res) => console.log('indexed', res))
+  // .catch((err) => console.log('not indexed', err));
 
   return inPageUI;
 };

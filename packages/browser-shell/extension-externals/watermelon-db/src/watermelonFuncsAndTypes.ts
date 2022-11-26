@@ -3,7 +3,7 @@ import withObservables, {
   ObservableifyProps,
 } from '@nozbe/with-observables';
 
-import { Database, Q, Query } from '@nozbe/watermelondb';
+import { Database, Q, Query, Collection } from '@nozbe/watermelondb';
 
 import DatabaseProvider, {
   withDatabase,
@@ -37,4 +37,5 @@ export {
   type ExtractedObservables,
   type ObservableifyProps,
   Database,
+  Collection,
 };

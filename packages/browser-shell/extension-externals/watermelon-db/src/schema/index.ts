@@ -50,12 +50,19 @@ export const schema = appSchema({
       ],
     }),
     tableSchema({
-      name: TableName.TABPOSITIONS,
+      name: TableName.TAB_POSITIONS,
       columns: [
-        { name: 'tab_id', type: 'string', isIndexed: true },
         { name: 'api_tab_id', type: 'string', isIndexed: true },
         { name: 'url', type: 'string', isIndexed: true },
         { name: 'title', type: 'string' },
+        { name: 'created_at', type: 'number' },
+        { name: 'updated_at', type: 'number' },
+      ],
+    }),
+    tableSchema({
+      name: TableName.USER_SETTINGS,
+      columns: [
+        { name: 'theme_type', type: 'string', isIndexed: true },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' },
       ],

@@ -3,10 +3,10 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-      "useDefineForClassFields": false,
+    "useDefineForClassFields": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
   },
   "references": [{ "path": "../extension-common" },{ "path": "../extension-externals/watermelon-db" }],
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*","../../../global.d.ts"]
 }

@@ -14,14 +14,31 @@ import {
 import {
   InPageUIComponentShowState,
   msInPageUiStateStream,
+  msSendPushArgsStream,
+  msSendSetTabAsIndexed,
 } from '@workspace/extension-common';
 import BookmarkList from '../BookmarkList';
 import { useDatabase } from '@workspace/extension-base';
 import HistoryList from '../HistoryList';
+import List, { ListTest1 } from '../List/List';
+import { ListTest2 } from '../List/List/list2';
 
 export const Sidebar: React.FC<{ inPageUI: SharedInPageUIState }> = ({
   inPageUI,
 }) => {
+  // useEffect(() => {
+  //   msSendPushArgsStream.subscribe(
+  //     async ([{ changes, lastPulledAt }, sender]) => {
+  //       console.log('#### sync sidebar ####: ', changes, lastPulledAt);
+  //       // await syncWatermelonDbFrontends({
+  //       //   database: watermelonDb,
+  //       //   pullBridgeFromBackground: { changes, lastPulledAt },
+  //       // });
+  //     },
+  //   );
+  //   msSendSetTabAsIndexed();
+  // }, []);
+
   // const [sharedInPageUiState, setSharedInPageUiState] =
   //   useState<InPageUIComponentShowState>(inPageUI.componentsShown);
 
@@ -50,7 +67,10 @@ export const Sidebar: React.FC<{ inPageUI: SharedInPageUIState }> = ({
       </SidbarTopBar> */}
       {/* <S.Content>.. Content ..</S.Content> */}
       {/* <BookmarkList database={database} /> */}
-      <HistoryList database={database} />
+      {/* <HistoryList database={database} /> */}
+      {/* <List database={database} /> */}
+      <ListTest1 />
+      <ListTest2 />
 
       <CssModuleTestButton>.</CssModuleTestButton>
     </S.Container>

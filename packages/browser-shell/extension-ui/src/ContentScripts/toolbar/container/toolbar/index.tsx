@@ -7,7 +7,11 @@ import {
 
 import { useThemeContext } from '../../../../common/context';
 // import { darkTheme, lightTheme, ThemeProvider } from '~extension-ui';
-import { darkTheme, lightTheme, ThemeProvider } from '../../../../common';
+import {
+  darkTheme,
+  lightTheme,
+  ThemeProvider as StyledComponentThemeProvider,
+} from '../../../../common';
 
 import Toolbar from '../../components/toolbar';
 import {
@@ -25,7 +29,7 @@ const ToolbarContainer: React.FC<IToolbarContainer> = ({
   dependencies,
   toolbarRef,
 }) => {
-  console.log('.r.e.n.d.e.r ToolbarContainer');
+  // console.log('.r.e.n.d.e.r ToolbarContainer');
 
   const { inPageUI } = dependencies;
 
@@ -39,7 +43,7 @@ const ToolbarContainer: React.FC<IToolbarContainer> = ({
   useEffect(() => {
     console.log('useEffect toolbar []');
     msInPageUiStateStream.subscribe(([{ toolbar, sidebar }, sender]) => {
-      console.log('toolbar msInPageUiStateStream', toolbar, sidebar);
+      // console.log('toolbar msInPageUiStateStream', toolbar, sidebar);
       setSharedInPageUiState({ toolbar, sidebar });
     });
   }, []);
@@ -109,7 +113,9 @@ const ToolbarContainer: React.FC<IToolbarContainer> = ({
   return (
     <>
       {/* Theme styled-component */}
-      <ThemeProvider theme={themeType === 'light' ? lightTheme : darkTheme}>
+      <StyledComponentThemeProvider
+        theme={themeType === 'light' ? lightTheme : darkTheme}
+      >
         {/* Theme scss + css variables in style={} */}
         <div
           className={'theme-' + (themeType === 'dark' ? 'dark' : 'light')}
@@ -133,7 +139,7 @@ const ToolbarContainer: React.FC<IToolbarContainer> = ({
             bookmark={{ toggleBookmark: () => toggleBookmark() }}
           />
         </div>
-      </ThemeProvider>
+      </StyledComponentThemeProvider>
     </>
   );
 };

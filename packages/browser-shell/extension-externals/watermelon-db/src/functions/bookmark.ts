@@ -26,8 +26,6 @@ export const createBookmark = async ({
 }) => {
   const { url, normalizedUrl, title } = fields;
 
-  console.log('???', url, normalizedUrl, title);
-
   const bookmark = await database.write(async (writer) => {
     const bookmark = await database.collections
       .get<BookmarkModel>(TableName.BOOKMARKS)

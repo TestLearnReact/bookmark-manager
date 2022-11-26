@@ -44,7 +44,7 @@ export const scopeSend =
           .sendMessage(tabId, coreMessage)
           .then(() => {
             callback;
-            // console.log("Tru: ", coreMessage, tabId, coreMessage);
+            
           })
           .catch((err) => console.log('Err: ', err, tabId, coreMessage));
       } else {

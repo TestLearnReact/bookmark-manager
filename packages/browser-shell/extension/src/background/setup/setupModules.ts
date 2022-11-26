@@ -9,5 +9,5 @@ export async function setupBackgroundModules(
   /** Extension install, update Logic etc */
   backgroundModules.mainModuleBackground.setupWebExtAPIHandlers();
 
-  backgroundModules.tabManagementBackground.setupWebExtAPIHandlers();
+  await backgroundModules.tabManagementBackground.setupWebExtAPIHandlers();
 }

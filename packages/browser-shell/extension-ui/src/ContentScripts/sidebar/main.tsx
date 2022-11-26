@@ -20,6 +20,8 @@ export function setupFrontendSidebar(
   mount: InPageUIRootMount,
   dependencies: SidebarContainerDependencies,
 ): void {
+  let theme = localStorage.getItem('crxjs_theme');
+  if (!theme) theme = 'light';
   // document.addEventListener('DOMContentLoaded', function (event) {
   // React 18 dev bugs!?
   if (!root) {
@@ -28,7 +30,7 @@ export function setupFrontendSidebar(
     root.render(
       // render twice react 18 ???
       // <React.StrictMode>
-      <StyleSheetManager target={mount.shadowRoot as any}>
+      <StyleSheetManager target={mount.rootElement as any}>
         <ThemeProviderContext>
           <DatabaseProvider database={dependencies.watermelonDb}>
             <SidebarHolderContainer dependencies={dependencies} />

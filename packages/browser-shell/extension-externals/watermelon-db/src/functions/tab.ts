@@ -87,7 +87,7 @@ export const createTabPos = async ({
 
   const returnTab = await database.write(async (writer) => {
     const tab = await database.collections
-      .get<TabPositionModel>(TableName.TABPOSITIONS)
+      .get<TabPositionModel>(TableName.TAB_POSITIONS)
       .create((t) => {
         t.apiTabId = apiTabId;
         t.url = url;
@@ -122,8 +122,6 @@ export const createTabPos = async ({
 //   fields: Pick<TabModel, 'url' | 'title' | 'isActive'> & { id: string };
 // }) => {
 //   const { id, url, title, isActive } = fields;
-
-//   console.log('???', url, title);
 
 //   const returnTab = await database.write(async (writer) => {
 //     const tab = await database.collections

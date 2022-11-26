@@ -23,8 +23,9 @@ const scriptPaths = {
   toolbar: scriptPathToolbar,
   sidebar: scriptPathSidebar,
 };
-
-BackgroundMainModule({ contentScriptsPaths: scriptPaths });
+(async () => {
+  await BackgroundMainModule({ contentScriptsPaths: scriptPaths });
+})();
 
 export {};
 

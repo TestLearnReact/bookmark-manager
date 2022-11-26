@@ -1,110 +1,82 @@
-// import {
-//   SyncPushArgs,
-//   SyncPullArgs,
-//   synchronize,
-//   SyncDatabaseChangeSet,
-// } from '@nozbe/watermelondb/sync';
 import {
-  msSendPullArgs,
   msSendPushArgs,
   msSendPushArgsStream,
 } from '@workspace/extension-common';
 import Browser, { Runtime } from 'webextension-polyfill';
-import { TableName, TabModel } from '../database';
 
-import {
-  Database,
-  synchronize,
-  SyncPushArgs,
-  SyncDatabaseChangeSet,
-  Q,
-} from '@workspace/watermelon-db';
+import { Database, synchronize, SyncPushArgs } from '@workspace/watermelon-db';
+import { TabManagementBackground } from '../../tab-management';
+import { DbManagement } from '../db-management';
+
+// import {
+//   DbManagement,
+//   TabManagementBackground,
+// } from '@workspace/extension-base/modules';
 
 export class WatermelonDbBackground {
   private runtimeAPI: Runtime.Static;
   private database: Database;
+  private tabManagementBackground: TabManagementBackground;
+  private dbManagement: DbManagement;
 
   constructor({
     runtimeAPI = Browser.runtime,
     database,
+    tabManagementBackground,
   }: {
     runtimeAPI?: Runtime.Static;
     database: Database;
+    tabManagementBackground: TabManagementBackground;
   }) {
     this.runtimeAPI = runtimeAPI;
     this.database = database;
+    this.tabManagementBackground = tabManagementBackground;
+    this.dbManagement = new DbManagement({ database: this.database });
 
+    // only called from cs (background msSendPushArgs calls only send to tabs)
     msSendPushArgsStream.subscribe(
       async ([{ changes, lastPulledAt }, sender]) => {
-        console.log('sync sync sync ');
-        const res = await this.handleSync({ push: { changes, lastPulledAt } });
+        // delete fields ['_status', '_changed'] in raw record
+        const cleanedChanges = this.dbManagement.excludeFields({ changes });
 
-        const ii = sender.tab?.id;
-        if (ii) {
-          const atab = await database.collections
-            .get<TabModel>(TableName.TABS)
-            .query(
-              Q.and(
-                Q.where('api_tab_id', Q.notEq(ii)),
-                Q.where('is_open', Q.eq(true)),
-              ),
-            )
-            .fetch();
-          console.log('......', ii, atab);
+        // save changes from frontend db in background db
+        const res = await this.handleSync({
+          push: { changes: cleanedChanges, lastPulledAt },
+        });
 
-          atab.map((tab) => {
-            // send changes to other Tabs -> insert via pullChanges
-            console.log('ä', tab.id, tab);
-            msSendPushArgs(
+        // send changes to all open tabs where cs is injected an is not active
+        this.tabManagementBackground._tabsToSync.forEach(async (value, key) => {
+          console.log('# not: ', value, key);
+          if (!value.isActive && value.isCsInjected && value.isOpen) {
+            console.log('# yes: ', value, key);
+            await msSendPushArgs(
               {
                 changes: res.changes,
                 lastPulledAt: res.timestamp,
               },
-              { tabId: Number(tab.apiTabId) },
+              { tabId: key },
             );
-          });
-        }
+          }
+        });
       },
     );
   }
 
-  private excludeFields({
-    changes,
-    excludeFields = ['_status', '_changed'],
-  }: {
-    changes: SyncDatabaseChangeSet;
-    excludeFields?: string[];
-  }) {
-    const defaultExcluded = excludeFields;
-    const cleanedChanges = changes;
-
-    for (const key in cleanedChanges) {
-      const ii = cleanedChanges[key];
-      for (const key in ii) {
-        const createdUpdatedDeletedArr = ii[key];
-        createdUpdatedDeletedArr.map((rec) => {
-          defaultExcluded.map((field) => {
-            delete rec[field];
-          });
-        });
-      }
-    }
-
-    return cleanedChanges;
-  }
-
   private async handleSync({ push }: { push: SyncPushArgs }) {
-    const cleandedChanges = this.excludeFields({ changes: push.changes });
-
     /**
      * get data from frontend
+     * inject changes via pullChanges from frontend pushChanges
      */
     await synchronize({
       database: this.database,
 
       pullChanges: async ({ lastPulledAt, schemaVersion, migration }) => {
-        console.log('pullChanges:', cleandedChanges, lastPulledAt);
-        return { changes: cleandedChanges, timestamp: push.lastPulledAt };
+        console.log(
+          '### WatermelonDbBackground pullChanges:',
+          push.changes,
+          lastPulledAt,
+        );
+        return { changes: push.changes, timestamp: push.lastPulledAt };
       },
       pushChanges: async ({ changes, lastPulledAt }) => {
         //
@@ -116,10 +88,6 @@ export class WatermelonDbBackground {
      *  return changes to sync Watermelondb with other Tabs
      */
 
-    return { changes: cleandedChanges, timestamp: push.lastPulledAt };
-  }
-
-  private async handleUpdateLogic(now = Date.now()) {
-    console.log('- Update Logic -', now);
+    return { changes: push.changes, timestamp: push.lastPulledAt };
   }
 }

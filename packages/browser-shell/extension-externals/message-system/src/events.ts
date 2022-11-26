@@ -10,15 +10,9 @@ import {
 export const scopeOn = (scope: string) => (callback: MessageListener) => {
   const listener: CoreListener = (message, sender) => {
     if (message.async || message.scope !== scope) {
-      // console.log("false:: ", scope, message); todo 1000 mal bei inject
       return false;
     }
-    // console.log(
-    //   "ttt:: ",
-    //   message.tabId,
-    //   message.payload.greeting,
-    //   message.payload.data
-    // );
+
     try {
       callback(message.payload, sender);
     } catch (error) {
@@ -99,7 +93,7 @@ export const scopeOff =
 
 //     try {
 //       callback(message.payload, sender);
-//       // console.log('send: ', message);
+
 //     } catch (error) {
 //       // Log listener error
 //       console.error("Uncaught error in chrome.runtime.onMessage listener");
@@ -134,7 +128,7 @@ export const scopeOff =
 //             success: true,
 //             payload: response,
 //           };
-//           console.log("send Async: ", message);
+
 //           // return new Promise(coreResponse);
 //           sendResponse(coreResponse);
 //           //return true;
@@ -146,7 +140,6 @@ export const scopeOff =
 //         callback(message.payload, sender, respond);
 //         //callback(message.payload, sender).then(respond);
 
-//         // console.log("send Async: ", message); todo 20 send
 //       } catch (error) {
 //         const response: CoreResponse = {
 //           success: false,
@@ -172,7 +165,7 @@ export const scopeOff =
 // export const scopeOff = (scope: string) => (
 //   listener: MessageListener | AsyncMessageListener
 // ) => {
-//   console.log("66");
+
 //   const _listener = _getListener(scope, listener);
 
 //   if (_listener) {

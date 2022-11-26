@@ -11,7 +11,7 @@ export class TabManager {
   _tabsToSync = new Map<
     number,
     { id: number; isOpen: boolean; isActive: boolean }
-  >(); ////
+  >(); // //
 
   get size() {
     return this._tabs.size;
@@ -68,7 +68,6 @@ export class TabManager {
   }
 
   isTracked(id: number) {
-    // console.log('--> isTracked ', id, this.getTabState(id));
     return this._tabs.has(id);
   }
 
@@ -134,7 +133,6 @@ export class TabManager {
     const tab = this.getTabState(id);
 
     if (tab != null) {
-      console.log('setTabLoaded', tab);
       tab.setLoadedState(isLoaded);
     }
   }

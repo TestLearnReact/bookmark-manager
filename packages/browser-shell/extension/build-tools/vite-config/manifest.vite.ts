@@ -24,7 +24,7 @@ export const manifest = defineManifest({
   content_scripts: [
     {
       js: ['src/contentScripts/cs-scripts/main.ts'],
-      matches: ['*://*/*'],
+      matches: ['https://www.google.com/*'],
       run_at: 'document_start',
     },
   ],
@@ -46,3 +46,4 @@ export const manifest = defineManifest({
 });
 
 // ['https://www.google.com/*']
+//  matches: ['*://*/*'],

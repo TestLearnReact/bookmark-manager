@@ -20,11 +20,9 @@ const BookmarkListItem: React.FC<IBookmarkListItemProps> = ({ bookmark }) => {
 
   return (
     <div>
-      id: {bookmark._raw.id}
+      .. id: {bookmark._raw.id}
       <br />
-      url: {bookmark.url}
-      <br />
-      title: {bookmark.title}
+      .. title: {bookmark.title}
       <div
         style={{
           height: '1px',

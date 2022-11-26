@@ -78,7 +78,8 @@ export function createShadowRootIfSupported(
   }
 
   let shadow: ShadowRoot | null = null; // todo
-  if (false && !__DEV__ && container.attachShadow) {
+  if (!__DEV__ && container.attachShadow) {
+    // !__DEV__ &&
     console.log('--------------');
     /** 'open' mode to access shadow dom elements from outisde the shadow root.
      * More info: https://developer.mozilla.org/en-US/docs/Web/API/Element/attachShadow#Parameters

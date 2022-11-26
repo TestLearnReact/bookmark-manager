@@ -19,7 +19,7 @@ import { TableName } from '../types';
 // }
 
 export class TabPositionModel extends Model {
-  static table = TableName.TABPOSITIONS;
+  static table = TableName.TAB_POSITIONS;
 
   static associations: Associations = {
     [TableName.TABS]: { type: 'belongs_to', key: 'tab_id' },
@@ -30,16 +30,14 @@ export class TabPositionModel extends Model {
   @field('api_tab_id') apiTabId!: string;
   @field('url') url!: string;
   @text('title') title!: string;
-  @field('tab_id') tabId!: string; // fk
   @readonly @date('created_at') createdAt;
   @readonly @date('updated_at') updatedAt;
 
   @writer async updateTab({
-    tabId,
     apiTabId,
     url,
     title,
-  }: Pick<TabPositionModel, 'tabId' | 'apiTabId' | 'url' | 'title'>) {
+  }: Pick<TabPositionModel, 'apiTabId' | 'url' | 'title'>) {
     await this.update((tab) => {
       tab.apiTabId = apiTabId;
       tab.url = url;

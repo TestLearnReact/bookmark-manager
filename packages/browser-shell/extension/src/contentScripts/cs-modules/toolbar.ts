@@ -27,8 +27,6 @@ export const toolbarMain: ToolbarScriptMain = async (dependencies) => {
   };
   createMount();
 
-  // msWaitForComponentInit().then(() => console.log('ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ'));
-
   msComponentInitStream.subscribe(async ([{ component }]) => {
     if (component !== 'toolbar') return;
     console.log('TOOLBAR -> S ETU P <-', component);

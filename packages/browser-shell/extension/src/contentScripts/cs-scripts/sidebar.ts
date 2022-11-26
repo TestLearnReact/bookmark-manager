@@ -1,3 +1,4 @@
+import { msSendTestStream } from '@workspace/extension-common';
 import { sidebarMain } from '../cs-modules/sidebar';
 import { ContentScriptRegistry } from '../types';
 

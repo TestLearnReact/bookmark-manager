@@ -2,6 +2,7 @@ import getMessage from '@workspace/message-system';
 import { SyncPullArgs, SyncPushArgs } from '@nozbe/watermelondb/sync';
 import { ContentScriptComponent, InPageUIComponentShowState } from '../types';
 import browser from 'webextension-polyfill';
+import { type } from 'os';
 
 /** extension messages */
 export const [msSendInjectScript, msInjectScriptStream, msWaitForInjectScript] =
@@ -59,11 +60,30 @@ export const [
 /**
  * sync WatermelonDB
  *  */
+export const [msSendTest, msSendTestStream, msWaitForSendTest] =
+  getMessage<any>('TEST');
+
 export const [msSendPushArgs, msSendPushArgsStream, msWaitForSendPushArgs] =
   getMessage<SyncPushArgs>('SYNC_PUSH');
 
 export const [msSendPullArgs, msSendPullArgsStream, msWaitForSendPullArgs] =
   getMessage<SyncPullArgs>('SYNC_PULL');
+
+type CreateTab = '';
+
+interface ICallFunction {
+  createTab?: {
+    args: { apiTabId: number; isActive: boolean; isOpen: boolean };
+  };
+  updateTab?: {
+    args: { apiTabId: number; isActive: boolean; isOpen: boolean };
+  };
+}
+export const [
+  msSendChangesFromBg,
+  msChangesFromBgStream,
+  msWaitForChangesFromBg,
+] = getMessage<ICallFunction>('SEND_CHAGES_FROM_BG');
 
 /**
  * development

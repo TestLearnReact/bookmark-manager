@@ -22,10 +22,10 @@ export class TabModel extends Model {
   static table = TableName.TABS;
 
   static associations: Associations = {
-    [TableName.TABPOSITIONS]: { type: 'has_many', foreignKey: 'tab_id' },
+    [TableName.TAB_POSITIONS]: { type: 'has_many', foreignKey: 'tab_id' },
   };
 
-  @children(TableName.TABPOSITIONS) tabPositions;
+  @children(TableName.TAB_POSITIONS) tabPositions;
 
   @field('api_tab_id') apiTabId!: string;
   @field('is_active') isActive!: boolean;
@@ -38,7 +38,7 @@ export class TabModel extends Model {
     title,
   }: Pick<TabPositionModel, 'url' | 'title'>) {
     const newPosition = await this.collections
-      .get<TabPositionModel>(TableName.TABPOSITIONS)
+      .get<TabPositionModel>(TableName.TAB_POSITIONS)
       .create((pos) => {
         pos.tab.set(this);
         pos.url = url;

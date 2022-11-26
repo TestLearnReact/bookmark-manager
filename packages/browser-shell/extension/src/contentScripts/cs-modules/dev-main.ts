@@ -1,3 +1,4 @@
+import { msSendSetTabAsIndexed } from '@workspace/extension-common';
 import { csMainModule } from './main';
 
 import { sidebarMain } from './sidebar';
@@ -8,8 +9,6 @@ import { toolbarMain } from './toolbar';
  * Change MakeHMRworking to makeHMRworking for vite reload instead of hmr
  */
 export const MakeHMRworking = async () => {
-  // console.log("- - - HMR - - - HMR - - - HMR- - - HMR - - -");
-  console.log('! contentScripts/cs-modules/dev-main.ts !');
   await csMainModule({
     loadRemotely: true,
     devScripts: {
@@ -17,6 +16,9 @@ export const MakeHMRworking = async () => {
       sidebarDevModule: sidebarMain,
     },
   });
+  // await msSendSetTabAsIndexed()
+  //   .then((res) => console.log('indexed', res))
+  //   .catch((err) => console.log('not indexed', err));
 };
 
 MakeHMRworking();

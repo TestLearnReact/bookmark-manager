@@ -3,3 +3,4 @@ export * from './Post';
 export * from './Bookmark';
 export * from './Tab';
 export * from './TabPosition';
+export * from './UserSettings';

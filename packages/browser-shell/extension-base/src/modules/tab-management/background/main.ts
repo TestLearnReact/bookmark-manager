@@ -1,68 +1,23 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import browser, { Tabs, Browser } from 'webextension-polyfill';
-
-// import { mapChunks } from 'src/util/chunk'
+import browser, { Tabs, Browser, bookmarks } from 'webextension-polyfill';
 import { mapChunks } from './utils';
-// import { CONCURR_TAB_LOAD } from '../constants'
 import { CONCURR_TAB_LOAD } from './constants';
-// import {
-//     registerRemoteFunctions,
-//     remoteFunctionWithExtraArgs,
-//     remoteFunctionWithoutExtraArgs,
-// } from 'src/util/webextensionRPC'
 import { TabManager } from './tab-manager';
 import { TabChangeListener } from './types'; // TabManagementInterface
 import {
-  msSendBackgroundEmittedData,
+  msSendPushArgs,
   msSetTabAsIndexedStream,
   resolvablePromise,
 } from '@workspace/extension-common';
-// // import { RawPageContent } from '../../page-analysis/'; // types
-// // import { fetchFavIcon } from '../../page-analysis/'; // background/get-fav-icon
-// // import {
-// //   ms_fetchTabStream,
-// //   ms_sendExtractRawPageContent,
-// //   ms_setTabAsIndexableStream,
-// // } from '@project/shared-utils';
-// import { resolvablePromise } from 'src/util/resolvable'
-// import { RawPageContent } from 'src/page-analysis/types'
-// import { fetchFavIcon } from 'src/page-analysis/background/get-fav-icon'
-// import { LoggableTabChecker } from 'src/activity-logger/background/types'
-// import { isLoggable, getPauseState } from 'src/activity-logger'
-// import { blacklist } from 'src/blacklist/background'
-// import TypedEventEmitter from 'typed-emitter'
-// import { EventEmitter } from 'events'
 import {
   createTab,
   createTabPos,
-  // createOrUpdateTab,
-  // createTab,
-  // createTabIfNeeded,
   Database,
-  handleIsOpen,
-  handleToggleIsActive,
-  // deleteTab,
-  // findTabById,
-  // isTabIndexed,
-  Q,
-  syncWatermelonDbFrontends,
+  DbManagement,
+  SyncDatabaseChangeSet,
   TableName,
   TabModel,
 } from '@workspace/extension-base/modules/watermelon';
-
-export const getValidUrl = (url = '') => {
-  let newUrl = window.decodeURIComponent(url);
-  newUrl = newUrl.trim().replace(/\s/g, '');
-
-  if (/^(:\/\/)/.test(newUrl)) {
-    return `http${newUrl}`;
-  }
-  if (!/^(f|ht)tps?:\/\//i.test(newUrl)) {
-    return `http://${newUrl}`;
-  }
-
-  return newUrl;
-};
 
 const SCROLL_UPDATE_FN = 'updateScrollState';
 const CONTENT_SCRIPTS = ['/lib/browser-polyfill.js', '/content_script.js'];
@@ -71,9 +26,12 @@ export interface TabManagementEvents {
   tabRemoved(event: { tabId: number }): void;
 }
 
+type RawPageContent = any;
+
 export class TabManagementBackground {
   tabManager: TabManager;
   database: Database;
+  dbManagement: DbManagement;
 
   _indexableTabs: { [tabId: number]: true } = {};
   _openTabs: TabModel[] = [];
@@ -102,78 +60,93 @@ export class TabManagementBackground {
       tabManager: TabManager;
       browserAPIs: Pick<
         Browser,
-        'tabs' | 'runtime' | 'webNavigation' | 'storage' | 'windows' | 'history'
+        | 'tabs'
+        | 'runtime'
+        | 'webNavigation'
+        | 'storage'
+        | 'windows'
+        | 'history'
+        | 'scripting'
       >;
       contentScriptsPaths: any;
       database: Database;
+      dbManagement: DbManagement;
     },
   ) {
     this.tabManager = options.tabManager;
     this.database = options.database;
-
-    msSetTabAsIndexedStream.subscribe(async ([_, sender]) => {
-      const id = sender.tab?.id || -1;
-
-      if (id <= 0) return;
-
-      // update
-      if (this.tabManager.isTracked(id)) {
-        // send({updated: [{}]})
-      }
-
-      // create
-      if (!this.tabManager.isTracked(id)) {
-        const oldTab = this._tabsToSync.get(id);
-        await this.trackNewTab(id, {
-          isActive: oldTab?.isActive || false,
-          isCsInjected: true,
-        });
-
-        // send({created: [{}]})
-      }
-
-      // const oldTab = this._tabsToSync.get(id);
-
-      // this._tabsToSync.set(id, {
-      //   id: id,
-      //   url: sender.tab?.url || '',
-      //   title: sender.tab?.title || '',
-      //   isOpen: true,
-      //   isActive: oldTab?.isActive || false,
-      //   isCsInjected: true,
-      // });
-
-      console.log('llllllllll', sender.tab, this._tabsToSync);
-    });
-
-    // ms_setTabAsIndexableStream.subscribe(([{ tab }, sender]) => {
-    //   const tabId = tab?.id || sender.tab?.id || -1; // todo tab? -1
-    //   this._indexableTabs[tabId] = true;
-    // });
-
-    // ms_fetchTabStream.subscribe(([{ tabId, url }, sender]) => {
-    //   tabId && this.tabManager.getTabState(tabId);
-    //   url && this.tabManager.getTabStateByUrl(url);
-    // });
-
-    // this.setupWebExtAPIHandlers(); //
+    this.dbManagement = options.dbManagement; // new DbManagement({ database: this.database });
   }
 
   static isTabLoaded = (tab: Tabs.Tab) => tab.status === 'complete';
 
   async setupWebExtAPIHandlers() {
+    await this.messages();
     // this.setupScrollStateHandling();
     // this.setupNavStateHandling();
     await this.setupTabLifecycleHandling();
   }
 
-  //   async extractRawPageContent(tabId: number): Promise<RawPageContent> {
-  //     let response;
-  //     await ms_sendExtractRawPageContent({}, { tabId }).then((res) => {
-  //       response = res;
-  //     });
-  //     return response;
-  //   }
+  async messages() {
+    msSetTabAsIndexedStream.subscribe(async ([_, sender]) => {
+      const id = sender.tab?.id || -1;
+      if (id <= 0) return;
+
+      await this.setTabAsIndexable(id);
+    });
+  }
+
+  private async setTabAsIndexable(id: number) {
+    const oldTab = this._tabsToSync.get(id);
+
+    // update
+    if (this.tabManager.isTracked(id)) {
+      if (oldTab) {
+        this._tabsToSync.set(oldTab.id!, {
+          ...oldTab,
+          isOpen: true,
+          isActive: oldTab?.isActive || true, // false,
+          isCsInjected: true,
+        });
+      }
+    }
+
+    // create
+    if (!this.tabManager.isTracked(id)) {
+      await this.trackNewTab(id, {
+        isActive: oldTab?.isActive || true, // false,
+        isCsInjected: true,
+      });
+    }
+
+    // dont work for some reason / values dont pass throug message-system
+    // const changesFromBg = await this.dbManagement.getChanges({
+    //   tables: ['bookmarks'],
+    // });
+
+    const changesFromBg = await this.dbManagement.getChanges2({
+      // tables: ['bookmarks'],
+    });
+
+    console.log('### init send sync ###', changesFromBg);
+    await msSendPushArgs(
+      {
+        changes: changesFromBg,
+        lastPulledAt: Date.now(),
+      },
+      { tabId: id },
+    )
+      .then((r) => console.log('### true', r))
+      .catch((r) => console.log('### false', r));
+  }
+
+  async extractRawPageContent(tabId: number): Promise<RawPageContent> {
+    let response;
+    // await ms_sendExtractRawPageContent({}, { tabId }).then((res) => {
+    //   response = res;
+    // });
+    return response;
+  }
 
   async getOpenTabsInCurrentWindow(): Promise<
     Array<{ id: number; url: string }>
@@ -207,8 +180,6 @@ export class TabManagementBackground {
 
   async trackExistingTabs() {
     const tabs = await this.options.browserAPIs.tabs.query({});
-
-    console.log('trackExistingTabs()................', tabs);
 
     await mapChunks(tabs, CONCURR_TAB_LOAD, async (tab) => {
       // @ts-ignore
@@ -247,54 +218,37 @@ export class TabManagementBackground {
       isActive: fields?.isActive || false,
       isCsInjected: fields?.isCsInjected || false,
     });
-
-    // const create = await createTab({
-    //   database: this.database,
-    //   fields: {
-    //     apiTabId: browserTab.id?.toString() || '-1',
-    //     isActive: false,
-    //     isOpen: true,
-    //   },
-    // });
-
-    // let ids = [] as number[];
-    // this._openTabs.map((tab) => ids.push(Number(tab.apiTabId)));
-
-    // await syncWatermelonDbFrontends({
-    //   database: this.database,
-    //   sendToTabIds: ids,
-    // });
-
-    // this._openTabs = await this.database.collections
-    //   .get<TabModel>(TableName.TABS)
-    //   .query(Q.where('is_open', true))
-    //   .fetch();
   }
 
   async injectContentScripts(tab: Tabs.Tab) {
     const isLoggable = true; // await this.shouldLogTab(tab);
-    if (!isLoggable) {
+    if (!isLoggable || !tab.id) {
       return;
     }
 
-    // dev checken / try mssendasindeaed
+    const oldTab = this._tabsToSync.get(tab.id); // todo right place
 
-    // this._tabsToSync.set(tab.id || -1, {
-    //   id: tab.id!,
-    //   isOpen: true,
-    //   isActive: true,
-    // });
+    // work with vite modules, no need to inject
+    if (__DEV__ && window.location.href.startsWith('chrome-extension://'))
+      return;
 
-    // for (const file of CONTENT_SCRIPTS) {
-    //   await this.options.browserAPIs.tabs
-    //     .executeScript(tab.id, { file })
-    //     .catch((err) =>
-    //       console.error(
-    //         "Cannot inject content-scripts into page - reason:",
-    //         err.message
-    //       )
-    //     );
-    // }
+    for (const file of CONTENT_SCRIPTS) {
+      await this.options.browserAPIs.scripting
+        .executeScript({
+          target: { tabId: tab.id as number, allFrames: true },
+          files: [this.options.contentScriptsPaths['todo main script']],
+        })
+        .then(() => {
+          this._tabsToSync.set(tab.id!, { ...oldTab!, isCsInjected: true });
+
+          console.log(
+            `worker.ts inject script '${'todo main script'}' in Tab ${tab.id}`,
+          );
+        })
+        .catch((error) =>
+          console.error(`worker.ts inject error Tab ${tab.id}`, error),
+        );
+    }
   }
 
   /**
@@ -336,6 +290,11 @@ export class TabManagementBackground {
         return;
       }
 
+      const newTab = createTab({
+        database: this.database,
+        fields: { apiTabId: tab.id.toString(), isActive: true, isOpen: true }, // todo check string/number apitabid
+      });
+
       // this._tabsToSync.set(tab.id, {
       //   id: tab.id,
       //   url: tab.url || '',
@@ -363,15 +322,21 @@ export class TabManagementBackground {
 
         for (const [xtabId, tab] of this._tabsToSync) {
           // Toggle active state on currently active and the new candidate tab
-          if (tab.isActive || xtabId === activeInfo.tabId) {
-            this._tabsToSync.set(xtabId, { ...tab, isActive: !tab.isActive });
+          // if (tab.isActive || xtabId === activeInfo.tabId) {
+          //   this._tabsToSync.set(xtabId, { ...tab, isActive: !tab.isActive });
+          // }
+          if (tab.isActive && xtabId !== activeInfo.tabId) {
+            this._tabsToSync.set(xtabId, { ...tab, isActive: false });
+          }
+          if (xtabId === activeInfo.tabId) {
+            this._tabsToSync.set(xtabId, { ...tab, isActive: true });
           }
         }
 
         console.log(
           '-- onActivated --',
           activeInfo.tabId,
-          activeInfo.previousTabId,
+
           this._tabsToSync,
         );
 
@@ -414,6 +379,13 @@ export class TabManagementBackground {
           // If the domain is different perform action.
           if (previousUrl !== changeInfo.url) {
             // do something
+            console.log(
+              'do something prev: ',
+              previousUrl,
+              'changeInfo.url:',
+              changeInfo.url,
+            );
+
             shouldUpdate = true;
           }
           // Add the current url as previous url
@@ -421,14 +393,8 @@ export class TabManagementBackground {
         }
 
         // history should update tab  is complete loaded
-        if (shouldUpdate && changeInfo.status === 'complete') {
-          // console.log('OPEN::::', this._openTabs);
-          // this._openTabs.map((tab) =>
-          //   msSendBackgroundEmittedData(
-          //     { onUpdated: { tabId, tabinfo, changeInfo } },
-          //     { tabId: Number(tab.apiTabId) },
-          //   ),
-          // );
+        if (shouldUpdate && changeInfo.status === 'complete' && tabinfo.id) {
+          console.log(shouldUpdate, changeInfo.status, tabinfo.id);
 
           const pattern = /^((http|https|ftp):\/\/)/;
 
@@ -442,37 +408,19 @@ export class TabManagementBackground {
             isCsInjected: pattern.test(tabinfo.url || ''),
           });
 
-          // const create = await createTabPos({
-          //   database: this.database,
-          //   fields: {
-          //     apiTabId: tabinfo.id?.toString() || '-1',
-          //     url: tabinfo.url!,
-          //     title: tabinfo.title!,
-          //   },
-          // });
+          const create = await createTabPos({
+            database: this.database,
+            fields: {
+              apiTabId: tabinfo.id?.toString(),
+              url: tabinfo.url!,
+              title: tabinfo.title!,
+            },
+          });
 
-          // let ids = [] as number[];
-          // this._openTabs.map((tab) => ids.push(Number(tab.apiTabId)));
+          shouldUpdate = false;
 
-          // await syncWatermelonDbFrontends({
-          //   database: this.database,
-          //   sendToTabIds: ids,
-          // });
-          // console.log(
-          //   '###########---->>>>>',
-          //   create,
-          //   tabId,
-          //   ids,
-          //   this._openTabs,
-          //   await this.getOpenTabsInCurrentWindow(),
-          // );
+          console.log('-- onUpdate --', tabId, tabinfo, create);
         }
-
-        // await syncWatermelonDbFrontends({
-        //   database: this.database,
-        // });
-
-        console.log('-- onUpdate --', tabId, changeInfo, tabinfo);
       },
     );
   }
@@ -502,9 +450,19 @@ export class TabManagementBackground {
     tab,
   ) => {
     await this.trackingExistingTabs;
-    console.log('tabUpdatedListener');
+
     if (changeInfo.status) {
       this.tabManager.setTabLoaded(tabId, changeInfo.status === 'complete');
     }
   };
 }
+
+// https://gilfink.medium.com/quick-tip-using-the-chrome-devtools-fps-meter-1bb400b63f7
+
+// https://usehooks-ts.com/react-hook/use-intersection-observer
+// https://gist.github.com/ExcitedSpider/edbb2781d8c09ab16cf34eb2826a5bd0
+// https://github.com/pmmm114/react-virtual-scroll-hook
+// https://github.com/onderonur/react-infinite-scroll-hook/blob/master/src/useInfiniteScroll.ts
+
+// https://codesandbox.io/s/react-virtual-scroll-hook-nhzkrc?file=/src/index.js:979-994
+// https://codesandbox.io/s/214p1911yn?file=/src/index.js

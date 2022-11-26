@@ -18,19 +18,20 @@ const ThemeProvider: React.FC<{
   theme?: ThemeType;
   children: ReactNode;
 }> = ({ theme = 'light', children }) => {
-  const themeStorage = localStorage.getItem('theme');
-  if (!themeStorage) {
-    localStorage.setItem('theme', theme);
-  }
+  const themeStorage = localStorage.getItem('crxjs_theme');
 
   const [currentTheme, setCurrentTheme] = React.useState<ThemeType>(
-    themeStorage as ThemeType,
-  ); // "light"
+    themeStorage ? (themeStorage as ThemeType) : theme,
+  );
+
+  if (!themeStorage) {
+    localStorage.setItem('crxjs_theme', currentTheme);
+  }
 
   // todo doppelt click
   useEffect(() => {
     msSendSharedStateSettings({ theme: currentTheme });
-    localStorage.setItem('theme', currentTheme);
+    localStorage.setItem('crxjs_theme', currentTheme);
   }, [currentTheme]);
 
   return (

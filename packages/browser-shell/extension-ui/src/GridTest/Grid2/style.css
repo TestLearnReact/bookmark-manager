@@ -1,0 +1,15 @@
+#gallery {
+   /* width: 800px; 
+  height: 800px;  */
+  padding: 6px;
+  overflow: hidden;
+}
+
+.image {
+position: relative;
+float: left;
+margin: 0px;
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+}

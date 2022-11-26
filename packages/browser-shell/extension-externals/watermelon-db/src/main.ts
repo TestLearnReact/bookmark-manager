@@ -3,7 +3,12 @@ import LokiJSAdapter from '@nozbe/watermelondb/adapters/lokijs';
 import migrations from './model/migrations';
 
 import { schema } from './schema';
-import { BookmarkModel, TabModel, TabPositionModel } from './model';
+import {
+  BookmarkModel,
+  TabModel,
+  TabPositionModel,
+  UserSettingModel,
+} from './model';
 
 export const genWatermelonDb = async ({
   dbName,
@@ -45,7 +50,7 @@ export const genWatermelonDb = async ({
 
   const database = new Database({
     adapter,
-    modelClasses: [BookmarkModel, TabModel, TabPositionModel],
+    modelClasses: [BookmarkModel, TabModel, TabPositionModel, UserSettingModel],
   });
 
   return database;

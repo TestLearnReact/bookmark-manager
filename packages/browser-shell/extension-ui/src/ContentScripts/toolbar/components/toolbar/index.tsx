@@ -33,7 +33,7 @@ interface IToolbarProps extends ToolbarSubcomponentProps {
 }
 
 const Toolbar: React.FC<IToolbarProps> = (props) => {
-  console.log('r.e.r.e.n.d.e.r Toolbar');
+  // console.log('r.e.r.e.n.d.e.r Toolbar');
 
   const {
     dependencies, // no need container/component structure

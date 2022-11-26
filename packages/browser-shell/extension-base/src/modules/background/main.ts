@@ -67,9 +67,7 @@ export class MainModuleBackground {
 
   // browser restarted
   private setupStartupHooks() {
-    console.log('setupStartupHooks');
     this.runtimeAPI.onStartup.addListener(async () => {
-      console.log('setupStartupHooks 22');
       await this.tabManagementBackground.trackExistingTabs();
     });
   }

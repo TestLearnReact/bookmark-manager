@@ -9,6 +9,13 @@ import { Rnd } from 'react-rnd';
 export const GlobalStyle = createGlobalStyle<{
   sidebarWidth: string;
 }>`
+ 
+
+    .__SidebarContainer {
+      font-size: 15px;
+      color: gray;
+    }
+
     .sidebar-draggable {
         height: 100% !important;
     }
@@ -40,6 +47,11 @@ export const SidebarContainer = styled.div`
   pointer-events: none;
 `;
 
+const tt = (props) => {
+  console.log('props.theme', props.theme);
+  return props.theme.themeColors.backgroundDark;
+};
+
 export const SidebarResize = styled(Rnd)<{
   locked: boolean;
   peeking: boolean;
@@ -50,8 +62,8 @@ export const SidebarResize = styled(Rnd)<{
   z-index: 3000;
   position: relative;
   border-left: solid 1px ${(props) => props.theme.themeColors.lineColor};
-  background: ${(props) => props.theme.themeColors.backgroundDark};
-  color: ${({ theme }) => theme?.themeColors.textColor};
+  background: ${(props) => tt(props)};
+  // color: ${({ theme }) => theme?.themeColors.textColor};
   pointer-events: auto;
 `;
 

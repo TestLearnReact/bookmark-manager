@@ -39,10 +39,12 @@ export async function syncWatermelonDbFrontends({
   database,
   pullBridgeFromBackground = { changes: {}, lastPulledAt: Date.now() },
   sendToTabIds = [],
+  testPullAll = false,
 }: {
   database: Database;
   pullBridgeFromBackground?: SyncPushArgs;
   sendToTabIds?: number[];
+  testPullAll?: boolean;
 }) {
   const { changes: synyChanges, lastPulledAt: syncTimestamp } =
     pullBridgeFromBackground;
@@ -56,6 +58,7 @@ export async function syncWatermelonDbFrontends({
         '..sync pull frontend',
         pullBridgeFromBackground,
         cleanedChanges,
+        testPullAll,
       );
 
       return {
@@ -64,7 +67,12 @@ export async function syncWatermelonDbFrontends({
       };
     },
     pushChanges: async ({ changes, lastPulledAt }) => {
-      console.log('..sync push frontend', changes);
+      console.log('..sync push frontend', changes, testPullAll);
+
+      if (testPullAll) {
+        const cleanedChanges = excludeFields({ changes });
+        console.log('####### ', cleanedChanges);
+      }
 
       const cleanedChanges = changes; // excludeFields({ changes });
       try {
@@ -87,4 +95,6 @@ export async function syncWatermelonDbFrontends({
     },
     migrationsEnabledAtVersion: 1,
   });
+
+  return;
 }

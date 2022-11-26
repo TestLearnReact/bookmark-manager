@@ -15,7 +15,7 @@ type IHistoryListProps = ExtractedObservables<
 
 const getObservables = ({ database }: { database: Database }) => ({
   tabPositions: database.collections
-    .get<TabPositionModel>(TableName.TABPOSITIONS)
+    .get<TabPositionModel>(TableName.TAB_POSITIONS)
     .query()
     .observe(),
 });
@@ -41,8 +41,16 @@ const HistoryListItem: React.FC<{ historyItem: any; index: number }> = ({
 }) => {
   return (
     <>
-      ..Item {index} / {historyItem.title}
+      .. Item: {index}
       <br />
+      .. {historyItem.title}
+      <div
+        style={{
+          height: '1px',
+          backgroundColor: 'black',
+          margin: '0 5px',
+        }}
+      />
     </>
   );
 };

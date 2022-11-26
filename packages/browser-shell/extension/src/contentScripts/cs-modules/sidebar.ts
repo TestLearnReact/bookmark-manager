@@ -33,12 +33,6 @@ export const sidebarMain: SidebarScriptMain = async (dependencies) => {
     await setUp();
   });
 
-  // msWaitForComponentInit().then(({ component }) => {
-  //   if (component !== 'sidebar') return;
-  //   console.log('SIDEBAR -> S ETU P <-', component);
-  //   setUp();
-  // });
-
   msComponentDestroyStream.subscribe(async ([{ component }, sender]) => {
     if (component !== 'sidebar') return;
     console.log('SIDEBAR -> DESTROY <-', component);
